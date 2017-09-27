@@ -1,0 +1,122 @@
+
+	<div class="detailCont">
+
+		<div class="banner">
+			<div class="swiper-container">
+				<div class="swiper-wrapper">
+					<div class="swiper-slide"><a href="#"><img src="__PUBLIC__/home/uploadfile/images/banner01.jpg"></a></div>
+					<div class="swiper-slide"><a href="#"><img src="__PUBLIC__/home/uploadfile/images/banner01.jpg"></a></div>
+					<div class="swiper-slide"><a href="#"><img src="__PUBLIC__/home/uploadfile/images/banner01.jpg"></a></div>
+					<div class="swiper-slide"><a href="#"><img src="__PUBLIC__/home/uploadfile/images/banner01.jpg"></a></div>
+				</div>
+				<div class="swiper-pagination"></div>
+			</div>
+		</div>
+
+		<div class="name">
+			{$goods.goods_name}<span class="fr">￥{$goods.goods_price}</span>
+		</div>
+		<div class="DCBlock block1">
+			<ul class="flex-display flex-alignC">
+				<li class="flex-flex1">
+					<img src="__PUBLIC__/home/images/success.png">全场满50包邮
+				</li>
+				<li class="flex-flex1">
+					<img src="__PUBLIC__/home/images/success.png">7天无理由退款
+				</li>
+				<li class="flex-flex1">
+					<img src="__PUBLIC__/home/images/success.png">正品保障
+				</li>
+			</ul>
+		</div>
+		<div class="DCBlock block2">
+			销量：{$goods.sales_sum}<span class="fr">快递费：5元</span>
+		</div>
+		<div class="indexTitle">
+			商品介绍
+		</div>
+		<div class="DCBlock block3">
+			{$goods.goods_desc}
+		</div>
+    </div>
+
+    <div class="bottomBlank"></div>
+    <div class="bottom" style="z-index: 10000">
+    	<ul class="flex-display flex-alignC">
+            <li class="flex-flex1">
+            	<a  data-href="{:url('Mall/index')}" onclick="ajax_detail(this)">
+                	<img class="nimg" src="__PUBLIC__/home/images/mall_icon04.png">
+                    <p>首页</p>
+                </a>
+            </li>
+            <li class="flex-flex1">
+            	<a   data-href="{:url('Mall/cart')}" onclick="ajax_detail(this)">
+                	<img class="nimg" src="__PUBLIC__/home/images/mall_icon02.png">
+                    <img class="himg" src="__PUBLIC__/home/images/mall_icon02_h.png">
+                    <p>购物车</p>
+                </a>
+            </li>
+            <li class="flex-flex2 big">
+            	<a href="javascript:void(0);" onClick="AjaxAddCart({$goods['id']},1,0);">
+                    <p>加入购物车</p>
+                </a>
+            </li>
+            <li class="flex-flex2 big2">
+            	<a href="javascript:void(0);" onClick="AjaxAddCart({$goods['id']},1,1);">
+                    <p>立即购买</p>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+<script>
+$(function(e) {
+
+	$(".loading").hide();
+
+	var mySwiper = new Swiper('.swiper-container', {
+		autoplay: 5000,
+		loop:true,
+		pagination : '.swiper-pagination',
+	})
+
+});
+function AjaxAddCart(goods_id,num,to_catr)
+{
+	// 如果有商品规格 说明是商品详情页提交
+
+		$.ajax({
+			type : "POST",
+			url:"{:url('Mall/ajaxAddCart')}",
+			data : {goods_id:goods_id,goods_num:num},// 你的formid 搜索表单 序列化提交
+			dataType:'json',
+			success: function(data){
+				// 加入购物车后再跳转到 购物车页面
+				//直接购买
+				if(to_catr == 1) {
+					location.href ="{:url('Mall/cart')}";
+				} else {
+					if(data.status < 0)
+					{
+						tips(data.msg);
+						return false;
+					}
+//					cart_num = parseInt($('#cart_quantity').html())+parseInt($('input[name="goods_num"]').val());
+//					$('#cart_quantity').html(cart_num);
+					tips(data.msg);
+					/*layer.open({
+					 type: 2,
+					 title: '温馨提示',
+					 skin: 'layui-layer-rim', //加上边框
+					 area: ['490px', '386px'], //宽高
+					 content:"/index.php?m=Home&c=Goods&a=open_add_cart"
+					 });*/
+				}
+			}
+		});
+
+}
+
+
+</script>
+

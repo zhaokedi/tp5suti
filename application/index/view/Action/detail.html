@@ -1,0 +1,232 @@
+
+
+	<div class="EDCont">
+		<div class="EDImg">
+			<div class="banner">
+				<div class="swiper-container">
+					<div class="swiper-wrapper">
+						<volist name="imgs" id="vo">
+							<div class="swiper-slide">
+								<!--<a href="#">-->
+								<img src="{$vo.savepath|fullimgpath}">
+								<!--</a>-->
+							</div>
+						</volist>
+					</div>
+					<div class="swiper-pagination"></div>
+				</div>
+			</div>
+			<!--<img src="__PUBLIC__/home/uploadfile/images/index_img01.jpg">-->
+			<!--<img src="{$action.first_img|fullimgpath}">-->
+			<div class="text"  style="z-index: 999">
+				<h1>UWEGO杠铃健身操</h1>
+				<!--<b class="favourBtn curr">-->
+					<!--<img class="nimg" src="__PUBLIC__/home/images/favour.png">-->
+					<!--<img class="himg" src="images/favour_h.png">-->
+				<!--</b>-->
+			</div>
+		</div>
+
+		<div class="EDText EDText0 flex-display flex-alignC">
+			<div class="img">
+				<img src="{$action.teacherhead|fullimgpath}">
+			</div>
+			<div class="text0 flex-flex1">
+				<h1>{$action.teachername}</h1>
+				<p>
+					{$action.teacherabout}
+				</p>
+			</div>
+		</div>
+
+		<div class="EDText EDText1">
+			<div class="title">
+				课程时长
+			</div>
+			<div class="text">
+				<p>{$action.teachdate} {$action.starttime}-{$action.endtime}</p>
+			</div>
+		</div>
+
+		<div class="EDText EDText2">
+			<div class="title">
+				适合人群
+			</div>
+			<div class="text">
+				<p>
+					<if condition="$action['one_status'] eq 1">
+						<span style="color:#fae13e;">增肌</span>，
+						<else/>
+						增肌，
+					</if>
+
+					<if condition="$action['two_status'] eq 1">
+						<span style="color:#fae13e;">减脂</span>，
+						<else/>
+						减脂，
+					</if>
+
+					<if condition="$action['three_status'] eq 1">
+						<span style="color:#fae13e;">塑形</span>，
+						<else/>
+						塑形，
+					</if>
+
+					<if condition="$action['four_status'] eq 1">
+						<span style="color:#fae13e;">康复</span>
+						<else/>
+						康复
+					</if>
+
+				</p>
+			</div>
+		</div>
+
+		<div class="EDText EDText3">
+			<div class="title">
+				运动强度
+			</div>
+			<div class="text">
+				<for start="1" end="6">
+					<if condition="($i elt $action['powerlevel'])">
+						<img src="__PUBLIC__/home/images/ED_img07_h.png">
+						<else/>
+						<img src="__PUBLIC__/home/images/ED_img07.png">
+					</if>
+				</for>
+
+			</div>
+		</div>
+
+		<div class="EDText EDText4">
+			<div class="title">
+				课程简介
+			</div>
+			<div class="text">
+				{$action.actioninfo}
+			</div>
+		</div>
+
+		<div class="EDText EDText5">
+			<div class="title">
+				注意事项
+			</div>
+			<div class="text">
+				{$action.notice}
+			</div>
+		</div>
+
+		<!--<div class="EDText EDText6">-->
+			<!--<div class="title">-->
+				<!--健身步骤-->
+			<!--</div>-->
+			<!--<div class="text">-->
+				<!--<img src="__PUBLIC__/home/uploadfile/images/ED_img01.jpg">-->
+				<!--{$action.step}-->
+			<!--</div>-->
+		<!--</div>-->
+
+		<div class="indexTitle">会员评价：</div>
+
+		<volist name="pjlist" id="vo">
+			<div class="EDText EDText7">
+				<div class="title">
+					{$vo.nickname}
+				</div>
+				<div class="text">
+					<p>{$vo.content}</p>
+				</div>
+			</div>
+		</volist>
+
+
+
+
+
+
+		<div class="btnBottomBlank"></div>
+		<div class="btnBottom">
+			<a href="javascript:void(0);"  onclick="check_action_appointment_status({$action['id']});">
+				立即预约
+			</a>
+		</div>
+        
+        
+    </div>
+
+
+
+<script>
+	$(function(){
+		var mySwiper = new Swiper('.swiper-container', {
+			autoplay: 3000,
+			loop:true,
+			pagination : '.swiper-pagination',
+		})
+	})
+
+	//点击团操预约时对能否预约的判断
+	function check_action_appointment_status(actionid){
+		var res= check_tel("{:url('Action/detail')}");
+		if(res==false){
+			return
+		}
+
+		show_loading();
+		var url="{:url('check_user_action')}";
+		$.ajax({
+			url : url,
+			type : 'POST',
+			data : {
+				"actionid" : actionid
+			},
+			success : function(rdata){
+				hide_loading();
+				if(rdata['status'] == 1){
+					var href="{:url('appointment')}?actionid="+actionid;
+//					window.location.href = href;
+					$.ajax({
+						url : href,
+						type : 'POST',
+						dataType : 'html',
+						data : {'ajax' : 1,'actionid':actionid},
+						success : function(rdata) {
+							$(".loading").hide();
+							history.pushState(null,'',href)
+							$(".contain").html(rdata);
+						},
+					});
+				}else if(rdata['status'] == 2){
+					tips(rdata['msg']);
+				}
+			},
+			error : function(){
+				tips('操作失败');
+			}
+		});
+	}
+jQuery(document).ready(function(e) {
+	$(".loading").hide();
+
+});
+	function check_tel(table){
+		var tel='{$user.tel}'
+		if(!tel){
+			var url="{:url('vip/bind_tel')}";
+			$.ajax({
+				url : url,
+				type : 'POST',
+				dataType : 'html',
+				data : {'ajax' : 1,table:table},
+				success : function(rdata) {
+					layer.closeAll();
+					history.pushState(null,'',url)
+					$(".contain").html(rdata);
+				},
+
+			});
+
+			return false;
+		}
+	}
+</script>

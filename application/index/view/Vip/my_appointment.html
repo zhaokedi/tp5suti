@@ -1,0 +1,250 @@
+
+<script>
+	/*
+	 * 注意：
+	 * 1. 所有的JS接口只能在公众号绑定的域名下调用，公众号开发者需要先登录微信公众平台进入“公众号设置”的“功能设置”里填写“JS接口安全域名”。
+	 * 2. 如果发现在 Android 不能分享自定义内容，请到官网下载最新的包覆盖安装，Android 自定义分享接口需升级至 6.0.2.58 版本及以上。
+	 * 3. 常见问题及完整 JS-SDK 文档地址：http://mp.weixin.qq.com/wiki/7/aaa137b55fb2e0456bf8dd9148dd613f.html
+	 *
+	 * 开发中遇到问题详见文档“附录5-常见错误及解决办法”解决，如仍未能解决可通过以下渠道反馈：
+	 * 邮箱地址：weixin-open@qq.com
+	 * 邮件主题：【微信JS-SDK反馈】具体问题
+	 * 邮件内容说明：用简明的语言描述问题所在，并交代清楚遇到该问题的场景，可附上截屏图片，微信团队会尽快处理你的反馈。
+	 */
+	wx.config({
+		debug: false,
+		appId: '{$signPackage.appId}',
+		timestamp: '{$signPackage.timestamp}',
+		nonceStr: '{$signPackage.nonceStr}',
+		signature: '{$signPackage.signature}',
+		jsApiList: [
+			'checkJsApi',
+			'chooseWXPay',
+			'getLocation',
+			'openLocation',
+		]
+	});
+</script>
+
+<div class="MADCont">
+	<div class="swiper-container">
+		<div class="MADNav">
+			<ul class="flex-display flex-alignC">
+
+			</ul>
+		</div>
+
+
+		<div class="swiper-wrapper">
+			<volist name="totallist" id="vv" key="k">
+				<div class="swiper-slide ">
+					<if condition="$k eq 3">
+						<volist name="vv.shoplist" id="vo">
+							<div class="MADBlock">
+								<div class="name">
+									{$vo.typename}<span class="sp1">{$vo.count}</span>次
+								</div>
+								<volist name="vo.appolist" id="vo1">
+									<div class="classes">
+										<if condition="$vo1.status eq 1 ">待进行<elseif condition="$vo1.status eq 2"/>已取消<elseif condition="$vo1.status eq 3"/> 已完成 <else/>进行中</if>
+									</div>
+
+									<div class="li flex-display flex-alignC">
+										<a data-href="{$vo1.appo_detail_url}" onclick="ajax_load('{$vo1.appo_detail_url}')">
+											<div class="img">
+												<img src="__PUBLIC__/home/uploadfile/images/myAD_img01.jpg">
+											</div>
+										</a>
+
+										<div class="text flex-flex1">
+											<a data-href="{$vo1.appo_detail_url}" onclick="ajax_load('{$vo1.appo_detail_url}')">
+												<h1>{$vo1.name}</h1>
+												<p>预约时间：{$vo1.yuyuetime|date="Y-m-d H:i",###}</p>
+											</a>
+										</div>
+
+										<if condition="$vo1['status'] eq 1 and $vo1['is_pingjia'] eq 0">
+											<div class="btn">
+												<a href="javascript:;" data-href="{$vo1.appo_cal_url}" onclick="ajax_load('{$vo1.appo_cal_url}')">取消预约</a>
+											</div>
+											<elseif condition="$vo1['status'] eq 3 and $vo1['is_pingjia'] eq 0"/>
+
+											<div class="btn">
+												<a data-href="{$vo1.appo_eva_url}" onclick="ajax_load('{$vo1.appo_eva_url}')">立即评价</a>
+												<p>可获得积分：{$vo1.point}分</p>
+											</div>
+											<elseif condition="$vo1['status'] eq 3 and $vo1['is_pingjia'] eq 1"/>
+											<div class="btn">
+												<a data-href="{$vo1.appo_evad_url}" onclick="ajax_load('{$vo1.appo_evad_url}')">查看评价</a>
+												<p>已获得积分：{$vo1.point}分</p>
+											</div>
+											<elseif/>
+											<div class="btn">
+												&nbsp;
+											</div>
+										</if>
+
+									</div>
+								</volist>
+							</div>
+						</volist>
+						<else/>
+						<volist name="vv.shoplist" id="vo">
+							<div class="MADBlock">
+								<div class="name">
+									{$vo.shopname}<span class="sp1">{$vo.count}</span>次<a href="javascript:;" onclick="look_map('{$vo.shopname}','{$vo.addr}','{$vo.lat}')">查看地图&gt;</a>
+								</div>
+								<volist name="vo.appolist" id="vo1">
+									<div class="classes">
+										<if condition="$vo1.status eq 1 ">待进行<elseif condition="$vo1.status eq 2"/>已取消<elseif condition="$vo1.status eq 3"/> 已完成 <else/>进行中</if>
+									</div>
+
+									<div class="li flex-display flex-alignC">
+										<a data-href="{$vo1.appo_detail_url}" onclick="ajax_load('{$vo1.appo_detail_url}')">
+											<div class="img">
+												<img src="__PUBLIC__/home/uploadfile/images/myAD_img01.jpg">
+											</div>
+										</a>
+
+										<div class="text flex-flex1">
+											<a data-href="{$vo1.appo_detail_url}" onclick="ajax_load('{$vo1.appo_detail_url}')">
+												<h1>{$vo1.name}</h1>
+												<p>预约时间：{$vo1.yuyuetime|date="Y-m-d H:i",###}</p>
+											</a>
+										</div>
+
+										<if condition="$vo1['status'] eq 1 and $vo1['is_pingjia'] eq 0">
+											<div class="btn">
+												<a href="javascript:;" data-href="{$vo1.appo_cal_url}" onclick="ajax_load('{$vo1.appo_cal_url}')">取消预约</a>
+											</div>
+											<elseif condition="$vo1['status'] eq 3 and $vo1['is_pingjia'] eq 0"/>
+
+											<div class="btn">
+												<a data-href="{$vo1.appo_eva_url}" onclick="ajax_load('{$vo1.appo_eva_url}')">立即评价</a>
+												<p>可获得积分：{$vo1.point}分</p>
+											</div>
+											<elseif condition="$vo1['status'] eq 3 and $vo1['is_pingjia'] eq 1"/>
+											<div class="btn">
+												<a data-href="{$vo1.appo_evad_url}" onclick="ajax_load('{$vo1.appo_evad_url}')">查看评价</a>
+												<p>已获得积分：{$vo1.point}分</p>
+											</div>
+											<elseif/>
+											<div class="btn">
+												&nbsp;
+											</div>
+										</if>
+
+									</div>
+								</volist>
+
+							</div>
+						</volist>
+					</if>
+
+				</div>
+			</volist>
+		</div>
+	</div>
+
+</div>
+	<ul style="display: none" id="ulist">
+		<volist name="appo_list" id="vo">
+			<div class="list{$i}" >
+				<div class="MAList1 flex-flex1 swiper-pagination-bullet swiper-pagination-bullet" >
+					<h1>{$vo[num]|default=0}</h1>
+					<p>{$vo[act]}/次</p>
+				</div>
+			</div>
+		</volist>
+	</ul>
+<script>
+	function look_map(name,addr,option){
+		var option=option.split(",")
+		var latitude =parseFloat(option[0]);
+		var longitude =parseFloat(option[1]);
+		wx.ready(function () {
+			wx.openLocation({
+				latitude: latitude, // 纬度，浮点数，范围为90 ~ -90
+				longitude: longitude, // 经度，浮点数，范围为180 ~ -180。
+				name: name, // 位置名
+				address: addr, // 地址详情说明
+				scale: 14, // 地图缩放级别,整形值,范围从1~28。默认为最大
+				infoUrl: '' // 在查看位置界面底部显示的超链接,可点击跳转
+			});
+		})
+	}
+
+
+	var appotype=1;//类型 1器械 2团操 3活动
+	var DStatus = 1; //判断是否加载完
+
+//	function ajax_type_appo(obj,type){
+//		appotype=type
+//		ajax_appo(1);
+//		$(obj).addClass('curr').siblings('div').removeClass('curr');
+//		DStatus=1;
+//		page=1;
+
+//	}
+	//异步加载数据
+	function ajax_appo(){
+//		show_loading();
+		$(".loading").show();
+		$.ajax({
+			type: 'POST',
+			url: "{:url('ajax_appo')}" ,
+			data: {ajax:1,appotype:appotype} ,
+			dataType:"html" ,
+			success: function(data){
+//				console.log(data);
+//				hide_loading();
+				$("#content").html(data);
+				$(".loading").hide();
+
+//				if(data.length ==1 ){
+//					DStatus = 0;
+//					tips('没有更多了！');
+//				}else{
+//					if (pagenum==1){
+//						$("#content").html(data);
+//					}else {
+//						$("#content").append(data);
+//					}
+//					page++
+//				}
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				tips('服务器连接异常');
+			}
+		});
+	}
+
+
+$(function(e) {
+//	ajax_appo();
+	$(".loading").hide();
+//	$(".li a").click(function () {
+//		$(".loading").show();
+//		var url=$(this).attr("data-href");
+//		if(url==''){
+//			return
+//		}
+//		ajax_load(url);
+//	})
+	var mySwiper = new Swiper('.swiper-container', {
+		pagination : '.MADNav ul',
+		paginationClickable: true,
+		paginationBulletRender: function (swiper, index, className) {
+			//return '<span class="' + className + '">' + (index + 1) + '</span>';
+			//alert(data);
+//			alert(swiper);
+			var num=swiper+1;
+			var htmlli = $("#ulist .list"+num).html();
+//			console.log(className)
+			return htmlli;
+
+		}
+	});
+
+});
+</script>

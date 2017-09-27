@@ -1,0 +1,154 @@
+<style>
+	.color_i{
+		color:#333 ;
+	}
+</style>
+	<div class="myTBCont">
+
+		<div class="indexTitle">
+			更换手机号
+		</div>
+
+		<div class="MTBBlock">
+			<div class="flex-display flex-alignC VCCont1" style="margin-bottom:0.9rem;">
+				<input type="hidden" name="hid_check_tel" />
+				<input type="tel" id="phone" class="flex-flex1 color_i" placeholder="请输入新的手机号码" >
+				<a class="send1" onclick="sends.send();" id="getcode">获取验证码</a>
+			</div>
+			<input type="text" placeholder="请输入您收到的短信验证码" name="ver_code" required class="color_i">
+		</div>
+
+		<!--<div class="btnBottomBlank"></div>-->
+		<div class="btnBottom">
+			<a href="javascript:void(0);" id="pay_btn">
+				立即更换
+			</a>
+		</div>
+        
+        
+    </div>
+    
+
+
+
+<script>
+jQuery(document).ready(function(e) {
+	$(".loading").hide();
+	$("#pay_btn").click(function(){
+		//检查手机号是否有变动,手机号是否正确
+		var ver_code = $("input[name='ver_code']").val();
+		var phone = $('#phone').val().replace(/\s+/g,"");
+		var check_phone = $("input[name='hid_check_tel']").val();
+		var numbers = /^0?1[3|4|5|7|8][0-9]\d{8}$/;
+		if( !numbers.test(phone) || (phone.length <11) ){
+			tips('请输入正确的手机号码');
+			return false;
+		}else if( phone != check_phone ){
+			tips('两次输入的手机号码不一致');
+			return false;
+		}
+		//对用户表中的手机号码进行修改
+		$.ajax({
+			url : "{:url('change_tel')}",
+			type : 'POST',
+			data : {
+				'ver_code' : ver_code,
+				'phone' : phone
+			},
+			success : function(rdata){
+				if(rdata['status'] == 1){
+					tips(rdata['msg'])
+					setTimeout(function(){
+						ajax_load("{:url('my')}");
+					},1000)
+				}else if(rdata['status'] == 2){
+					tips(rdata['msg']);
+				}
+			},
+			error : function(){
+				tips("操作失败");
+			}
+		});
+
+	});
+});
+
+var sends = {
+	checked:1,
+	send:function(){
+		var numbers = /^1\d{10}$/;
+		var tel = $('#phone').val().replace(/\s+/g,""); //获取输入手机号码
+
+		if(!numbers.test(tel) || tel.length ==0){
+			tips('手机号格式错误');
+			return false;
+		}
+		//检查该手机号是否已经被绑定
+		var issend=$(".MTBBlock a").hasClass('send0');
+		if(issend==true){
+			tips('验证码已发送');
+			return false;
+		}
+
+		$.ajax({
+			url : "{:url('check_phone_use')}",
+			type : "POST",
+			data : {
+				'phone' : tel
+			},
+			success : function(rdata){
+				if( rdata['status'] == 1 ){
+//					console.log(rdata);
+					if(numbers.test(tel)){
+
+						$("#getcode").addClass('send0').removeClass('send1');
+						$("input[name='hid_check_tel']").val(tel);
+						send_message(tel);
+						timeCountDown();
+						timerInterval = setInterval(timeCountDown,1000);
+					}
+				}else if(rdata['status'] == 2){
+					tips(rdata['msg']);
+					return false;
+				}
+			},
+			error : function(){
+				tips('操作失败');
+			}
+		});
+
+	}
+}
+Countdowntime = 60;
+function timeCountDown(){
+
+	if(Countdowntime==0){
+		clearInterval(timerInterval);
+		$("#getcode").addClass('send1').removeClass('send0').html("获取验证码");
+		sends.checked = 1;
+		return true;
+	}
+	$("#getcode").html(Countdowntime+"S后再次发送");
+	Countdowntime--;
+}
+
+
+function send_message(phone){
+	$.ajax({
+		url : "{:url('Common/send_phone_message')}",
+		type : 'POST',
+		data : {
+			'phone' : phone
+		},
+		success : function(rdata){
+			if(rdata['status'] == 1){
+				tips(rdata['msg']);
+			}else{
+				tips(rdata['msg']);
+			}
+		}
+	});
+}
+</script>
+
+

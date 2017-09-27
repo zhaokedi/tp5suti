@@ -1,0 +1,105 @@
+
+
+	<div class="MACont">
+		<div class="MABanner">
+
+			<div class="swiper-container ">
+				<div class="swiper-wrapper ">
+
+					<div class="swiper-slide">
+						<a href="#">
+							<img src="__PUBLIC__/home/uploadfile/images/appointment_banner.jpg">
+						</a>
+					</div>
+					<div class="swiper-slide">
+						<a href="#">
+							<img src="__PUBLIC__/home/uploadfile/images/appointment_banner.jpg">
+						</a>
+					</div>
+					<div class="swiper-slide">
+						<a href="#">
+							<img src="__PUBLIC__/home/uploadfile/images/appointment_banner.jpg">
+						</a>
+					</div>
+					<div class="swiper-slide">
+						<a href="#">
+							<img src="__PUBLIC__/home/uploadfile/images/appointment_banner.jpg">
+						</a>
+					</div>
+
+				</div>
+				<div class="swiper-pagination"></div>
+			</div>
+
+		</div>
+
+		<div class=" flex-display flex-alignC">
+
+
+			<div class="MAList1 flex-flex1">
+				<h1>0</h1>
+				<h2>器械/次</h2>
+			</div>
+			<div class="MAList1 flex-flex1">
+				<h1>0</h1>
+				<h2>团操/次</h2>
+			</div>
+			<div class="MAList1 flex-flex1">
+				<h1>0</h1>
+				<h2>活动/次</h2>
+			</div>
+		</div>
+
+
+
+		<div class="btnBottomBlank"></div>
+		<div class="btnBottom" onclick="ajax_html(this)">
+			<a data-href="{:url('Vip/my_card')}">
+				开通会员，立即预约
+			</a>
+		</div>
+        
+        
+    </div>
+    
+
+    
+
+
+
+<script>
+	//异步加载详情
+	function ajax_html(obj){
+		var url=$(obj).find('a').data('href');
+		$.ajax({
+			url : url,
+			type : 'POST',
+			dataType : 'html',
+			data : {'ajax' : 1},
+			success : function(rdata) {
+				$(".loading").hide();
+				history.pushState(null,'',url)
+				$(".contain").html(rdata);
+			},
+
+		});
+	}
+$(function(e) {
+
+
+		$(".loading").hide();
+
+		var mySwiper = new Swiper('.swiper-container', {
+			autoplay: 5000,
+			pagination : '.swiper-pagination',
+			loop:true,
+		})
+		
+
+	
+
+});
+</script>
+
+</body>
+</html>

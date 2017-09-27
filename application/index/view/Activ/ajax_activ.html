@@ -1,0 +1,33 @@
+<volist name="activlist" id="vo">
+	<li>
+		<div class="img">
+			<a data-href="{:url('detail',array('id'=>$vo['id']))}"><img src="{$vo['banner_img']|fullimgpath}"></a>
+			<div class="tips">
+				<a data-href="{:url('detail',array('id'=>$vo['id']))}">{$vo.activname}</a>
+				<div class="bar">
+					<b style=" width:{$vo.proccess}%"></b>
+				</div>
+			</div>
+		</div>
+		<div class="text">
+			<h1><span>￥{$vo.money}</span> {$vo.starttime|date="Y-m-d",###} 限{$vo.limit_people}人</h1>
+			<p><a href="{:url('detail',array('id'=>$vo['id']))}">
+			{$vo.activabout}
+			</a></p>
+
+			<if condition="($vo.proccess eq 100) AND ($vo.over eq 0) ">
+				<a class="wait" href="javascript:;">等待</a>
+			<elseif condition="$vo.over eq 1 " />
+				<a class="over">结束</a>
+			<else/>
+				<a class="btn" href="javascript:check_enroll({$vo['id']});">报名</a>
+			</if>
+
+			<if condition="($vo.proccess egt 70) AND ($vo.proccess neq 100) AND ($vo.over eq 0)">
+				<b><img src="__PUBLIC__/home/images/event_sign01.png"></b>
+			<elseif condition="($vo.proccess eq 100) AND ($vo.over eq 0) " />
+				<b><img src="__PUBLIC__/home/images/event_sign01_full.png"></b>
+			</if>
+		</div>
+	</li>
+</volist>

@@ -1,0 +1,164 @@
+ <!doctype html>
+<html style=" font-size:20px;">
+<head>
+<meta charset="utf-8">
+<title>肌动塑体</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, user-scalable=no, maximum-scale=1.0"/>
+<meta content="yes" name="apple-mobile-web-app-capable" />
+<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+<meta content="telephone=no" name="format-detection" />
+
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/home/css/reset.css">
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/home/css/style.css">
+<!--<link type="text/css" rel="stylesheet" href="__PUBLIC__/home/css/extstyle.css">-->
+
+	<script type="text/javascript" src="__PUBLIC__/ht/js/jquery.min.js"></script>
+
+<!-- <link type="text/css" rel="stylesheet" href="__PUBLIC__/home/css/mobiscroll.scroller.css">
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/home/css/mobiscroll.scroller.android-holo.css">
+
+<script type="text/javascript" src="__PUBLIC__/home/script/mobiscroll.core.js"></script>
+<script type="text/javascript" src="__PUBLIC__/home/script/mobiscroll.datetime.js"></script>
+<script type="text/javascript" src="__PUBLIC__/home/script/mobiscroll.i18n.zh.js"></script>
+<script type="text/javascript" src="__PUBLIC__/home/script/mobiscroll.scroller.js"></script>
+<script type="text/javascript" src="__PUBLIC__/home/script/mobiscroll.scroller.android-holo.js"></script> -->
+
+<!-- 引入layer的js  -->
+	<script type="text/javascript" src="__PUBLIC__/home/layer/layer.js"></script>
+
+<!-- 引入自己写的js  -->
+<!--<script type="text/javascript" src="__PUBLIC__/home/script/doing_cfc.js"></script>-->
+
+<!-- 载入层 -->
+<style type="text/css">
+/*全屏背景遮罩层*/
+.loadingPage_bg1 {
+	background:none repeat scroll 0 0 #000;
+	height:100%;
+	left:0; /*:rgba(0,0,0,0.5);*/
+	opacity:0.7;
+	filter:alpha(opacity=70);
+	width:100%;
+	position:absolute;
+	top:0px;
+	z-index:110;
+}
+/*局部背景遮罩*/
+.loadingPage_bg {
+	background:none repeat scroll 0 0 #fff;
+	height:100%;
+	left:0; /*:rgba(0,0,0,0.5);*/
+	opacity:1;
+	filter:alpha(opacity=100);
+	width:100%;
+	z-index:110;
+}
+#loadingPage {
+	display:block;
+	font-weight:bold;
+	font-size:12px;
+	color:#595959;
+	height:28px;
+	left:42%;
+	line-height:27px;
+	margin-left:-74px;
+	margin-top:-14px;
+	padding:10px 10px 10px 50px;
+	position:absolute;
+	text-align:left;
+	top:50%;
+	width:148px;
+	z-index:111;
+	background:url(__PUBLIC__/home/loading/img/loading.gif) no-repeat scroll 12px center #FFFFFF;
+	border:2px solid #86A5AD;
+}
+</style>
+
+<!--<script type="text/javascript" src="__PUBLIC__/home/loading/js/CommonPerson.js"></script>-->
+<!-- end 载入层 -->
+
+<script type="text/javascript">
+
+	$(function () {
+		var curr = new Date().getFullYear();
+		var currm = new Date().getMonth();
+		var currd = new Date().getDate();
+
+		var opt = {
+			'datetime': {
+				preset: 'datetime',
+				minDate: new Date(curr, currm, currd, 0, 0),
+				maxDate: new Date(2050, 11, 31, 23, 59),
+				stepMinute: 1
+			}
+		}
+
+		$('.settings select').bind('change', function() {
+			var demo = $('#demo').val();
+
+			if (!demo.match(/select/i)) {
+				$('.demo-test-' + demo).val('');
+			}
+
+			$('.demo-test-' + demo).scroller('destroy').scroller($.extend(opt[demo], {
+				theme: "android-holo light",
+				mode: "scroller",
+				lang: "zh",
+				display: "modal",
+				animate: ""
+			}));
+			$('.demo').hide();
+			$('.demo-' + demo).show();
+		});
+
+		$('#demo').trigger('change');
+
+	});
+</script>
+
+<script>
+$load = '';
+function show_loading(){
+	$load = layer.load(1); //换了种风格
+}
+
+function hide_loading(){
+	layer.close($load);
+}
+</script>
+
+<style type="text/css">
+	.demo {
+		display: none;
+	}
+</style>
+
+</head>
+
+<body style="background-color: #000">
+<script>
+	var CWidth = $("body").width();
+	var FSize = CWidth/375*20;
+	$("html").css("font-size",FSize);
+</script>
+{__CONTENT__}
+
+<script>
+	jQuery(document).ready(function($) {
+        $("#test").change(function(){
+        	var time = $("#test").val();
+        	var near_shop_id = $("#hid_near_id").val();
+			location.href = "./index.php?m=Home&c=Index&a=appointment&time="+time+"&shopid="+near_shop_id;
+		});
+    });
+
+</script>
+
+</body>
+</html>
+
+
+
+
+

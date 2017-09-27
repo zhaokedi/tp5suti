@@ -1,0 +1,271 @@
+	<style>
+		#phone{
+			color:#333 ;
+		}
+	</style>
+
+	<!-- 微信微信支付 -->
+	<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+	<script>
+		/*
+		 * 注意：
+		 * 1. 所有的JS接口只能在公众号绑定的域名下调用，公众号开发者需要先登录微信公众平台进入“公众号设置”的“功能设置”里填写“JS接口安全域名”。
+		 * 2. 如果发现在 Android 不能分享自定义内容，请到官网下载最新的包覆盖安装，Android 自定义分享接口需升级至 6.0.2.58 版本及以上。
+		 * 3. 常见问题及完整 JS-SDK 文档地址：http://mp.weixin.qq.com/wiki/7/aaa137b55fb2e0456bf8dd9148dd613f.html
+		 *
+		 * 开发中遇到问题详见文档“附录5-常见错误及解决办法”解决，如仍未能解决可通过以下渠道反馈：
+		 * 邮箱地址：weixin-open@qq.com
+		 * 邮件主题：【微信JS-SDK反馈】具体问题
+		 * 邮件内容说明：用简明的语言描述问题所在，并交代清楚遇到该问题的场景，可附上截屏图片，微信团队会尽快处理你的反馈。
+		 */
+		wx.config({
+			debug: false,
+			appId: '{$signPackage.appId}',
+			timestamp: '{$signPackage.timestamp}',
+			nonceStr: '{$signPackage.nonceStr}',
+			signature: '{$signPackage.signature}',
+			jsApiList: [
+				'checkJsApi',
+				'chooseWXPay'
+			]
+		});
+	</script>
+
+
+	<div class="myTBCont">
+		<div class="title">
+			<img src="__PUBLIC__/home/images/alert_icon.png">
+			<h1>您还未绑定手机号</h1>
+			<p>开通会员前需要完成手机号码绑定以便接收我们的预约密码</p>
+		</div>
+
+		<div class="MTBBlock">
+			<input type="hidden" name="coupon_id" value="{$coupon_id}" />
+			<input type="hidden" name="card_id" value="{$card_id}" />
+			<div class="VCCont1 flex-display flex-alignC" style="margin-bottom:0.9rem;" >
+				<input type="hidden" name="hid_check_tel" />
+				<input type="text" id="phone" class="flex-flex1" required placeholder="请输入手机号码">
+				<a class="send1" onclick="send();" id="getcode">获取验证码</a>
+			</div>
+			<input type="text" placeholder="请输入您收到的短信验证码" name="ver_code" required style="color:#333 ;">
+		</div>
+
+		<div class="btnBottomBlank"></div>
+		<div class="btnBottom">
+			<a href="javascript:;" onclick="pay_action()" >
+				立即绑定
+			</a>
+		</div>
+
+
+
+	</div>
+    
+    <!--loading-->
+    <div class="loading">
+    	<b></b>
+    </div>
+    <!--loading end-->
+    
+
+
+<script>
+
+$(function(e) {
+
+	$(".loading").hide();
+
+});
+	function pay_action(){
+		//检查手机号是否有变动,手机号是否正确
+		var table="{$table}";
+
+		show_loading();
+		var ver_code = $("input[name='ver_code']").val();
+		var phone = $('#phone').val().replace(/\s+/g,"");
+		var check_phone = $("input[name='hid_check_tel']").val();
+		var numbers = /^0?1[3|4|5|7|8][0-9]\d{8}$/;
+
+		if( !numbers.test(phone) || (phone.length <11) ){
+			hide_loading();
+			tips('请输入正确的手机号码');
+			return false;
+		}else if( phone != check_phone ){
+			hide_loading();
+			tips('两次输入的手机号码不一致');
+			return false;
+		}
+		//检查验证码是否正确
+		$.ajax({
+			url : "{:url('check_message_num')}",
+			type : 'POST',
+			data : {
+				'ver_code' : ver_code,
+				'phone' : phone
+			},
+			success : function(rdata){
+				hide_loading();
+				if(rdata['status'] == 1){
+					tips(rdata['msg'],1000);
+					if(table !=''){
+						setTimeout(function(){
+							$.ajax({
+								url : table,
+								type : 'POST',
+								dataType : 'html',
+								data : {'ajax' : 1},
+								success : function(rdata) {
+									history.pushState(null,'',table)
+									$(".contain").html(rdata);
+								},
+							});
+						},1000);
+					}else {
+						setTimeout(function(){
+							var uuu="{:url('Index/index_shop')}"
+							ajax_load(uuu);
+						},1000);
+					}
+					return false;
+				}else {
+					tips(rdata['msg']);
+				}
+			},
+			error : function(){
+				tips('短信验证失败，操作失败');
+			}
+		});
+
+	};
+function ajax_pay(){
+	$.ajax({
+		url : "{:url('pay_info')}",
+		type : 'POST',
+		dataType : 'json',
+		data : {
+			type:2,act:'vip'
+		},
+		success : function(rdata){
+			hide_loading();
+			if(rdata['status'] == 1){
+				wx.chooseWXPay({
+					timestamp: rdata['timeStamp'],
+					nonceStr: rdata['nonceStr'],
+					package: rdata['package'],
+					signType: 'MD5', // 注意：新版支付接口使用 MD5 加密
+					paySign: rdata['paySign'],
+					success: function (res) {
+						$.ajax({
+							url:"{:url('pay_success')}",
+							type:"POST",
+							dataType : 'json',
+							data:{
+							},
+							success: function(rdata){
+								if(rdata['status']==1){
+									hide_loading();
+									var href="{:url(vip_success)}"
+									ajax_load(href);
+								}
+								else if(rdata['status']==2){
+									tips("支付失败！");
+								}
+							},
+							error: function(data){
+								tips("支付成功后跳转，操作失败！");
+							}
+						});
+					},
+					cancel: function () {
+						tips("取消支付");
+					}
+				});
+			}else{
+				tips(rdata['msg']);
+			}
+
+		},
+		error : function(){
+			tips('支付操作失败');
+		}
+	});
+}
+
+
+
+
+	checked=1;
+
+	function send(){
+		var numbers = /^1\d{10}$/;
+		var tel = $('#phone').val().replace(/\s+/g,""); //获取输入手机号码
+
+		if(!numbers.test(tel) || tel.length ==0){
+			tips('手机格式错误');
+			return false;
+		}
+		//检查该手机号是否已经被绑定
+		var issend=$(".MTBBlock a").hasClass('send0');
+		if(issend==true){
+			tips('验证码已发送');
+			return false;
+		}
+		$.ajax({
+			url : "{:url('check_phone_use')}",
+			type : "POST",
+			data : {
+				'phone' : tel
+			},
+			success : function(rdata){
+				if( rdata['status'] == 1 ){
+//					console.log(rdata);
+						if(numbers.test(tel)){
+							$("#getcode").addClass('send0').removeClass('send1');
+							$("input[name='hid_check_tel']").val(tel);
+							send_message(tel);
+							timeCountDown();
+							 timerInterval = setInterval(timeCountDown,1000);
+						}
+				}else if(rdata['status'] == 2){
+					tips(rdata['msg']);
+					return false;
+				}
+			},
+			error : function(){
+				tips('操作失败');
+			}
+		});
+
+	}
+Countdowntime = 60;
+function timeCountDown(){
+
+	if(Countdowntime==0){
+		clearInterval(timerInterval);
+		$("#getcode").addClass('send1').removeClass('send0').html("获取验证码");
+		sends.checked = 1;
+		return true;
+	}
+	$("#getcode").html(Countdowntime+"S后再次发送");
+	Countdowntime--;
+}
+
+function send_message(phone){
+	$.ajax({
+		url : "{:url('Common/send_phone_message')}",
+		type : 'POST',
+		data : {
+			'phone' : phone
+		},
+		success : function(rdata){
+			if(rdata['status'] == 1){
+				tips(rdata['msg']);
+			}else if(rdata['status'] == 2){
+				tips(rdata['msg']);
+			}
+		}
+	});
+}
+</script>
+
+

@@ -1,0 +1,89 @@
+
+
+
+
+	<!--contain end-->
+<script>
+
+	function test(){
+
+	}
+
+
+$(function(){
+
+	$(".loading").hide();
+})
+$(".cont2 .list li .layerBtn").click(function(){
+	layer.open({
+		title:'',
+		closeBtn:0,
+//		shade: false,
+		type:1,
+		content:$(this).parent().find(".ticketlayer"),
+		shadeClose:true,
+		skin:"MTLayer"
+	});
+});
+
+//	$(".cont2 .list li .ticketlayer a").click(function(){
+//		layer.closeAll();
+//	});
+	function use_coupon(id){
+
+
+		var url="{:url('use_coupon')}";
+		$.ajax({
+			url : url,
+			type : 'POST',
+			dataType : 'json',
+			data : {'id' : id},
+			success : function(rdata) {
+				if (rdata.status ==1){
+
+
+					tips("使用成功");
+					setTimeout(function(){
+						layer.closeAll();
+						$("#"+id).remove();
+					},1000)
+				}
+			},
+		});
+	}
+	function gobuycard(obj){
+		var url=$(obj).attr("data-href");
+		$.ajax({
+			url : url,
+			type : 'POST',
+			dataType : 'html',
+			data : {'ajax' : 1},
+			success : function(rdata) {
+				$(".loading").hide();
+				history.pushState(null,'',url)
+				$(".contain").html(rdata);
+			},
+
+		});
+	}
+//	$(".ticketlist li").click(function () {
+//		$(".loading").show();
+//		var url=$(this).find('a').attr("data-href");
+//	})
+	function go_invite(obj){
+		$(".loading").show();
+		var url=$(obj).attr("data-href");
+		$.ajax({
+			url : url,
+			type : 'POST',
+			dataType : 'html',
+			data : {'ajax' : 1},
+			success : function(rdata) {
+				$(".loading").hide();
+				history.pushState(null,'',url)
+				$(".contain").html(rdata);
+			},
+
+		});
+	}
+</script>

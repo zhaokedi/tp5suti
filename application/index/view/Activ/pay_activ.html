@@ -1,0 +1,287 @@
+<script>
+	/*
+	 * 注意：
+	 * 1. 所有的JS接口只能在公众号绑定的域名下调用，公众号开发者需要先登录微信公众平台进入“公众号设置”的“功能设置”里填写“JS接口安全域名”。
+	 * 2. 如果发现在 Android 不能分享自定义内容，请到官网下载最新的包覆盖安装，Android 自定义分享接口需升级至 6.0.2.58 版本及以上。
+	 * 3. 常见问题及完整 JS-SDK 文档地址：http://mp.weixin.qq.com/wiki/7/aaa137b55fb2e0456bf8dd9148dd613f.html
+	 *
+	 * 开发中遇到问题详见文档“附录5-常见错误及解决办法”解决，如仍未能解决可通过以下渠道反馈：
+	 * 邮箱地址：weixin-open@qq.com
+	 * 邮件主题：【微信JS-SDK反馈】具体问题
+	 * 邮件内容说明：用简明的语言描述问题所在，并交代清楚遇到该问题的场景，可附上截屏图片，微信团队会尽快处理你的反馈。
+	 */
+	wx.config({
+		debug: false,
+		appId: '{$signPackage.appId}',
+		timestamp: '{$signPackage.timestamp}',
+		nonceStr: '{$signPackage.nonceStr}',
+		signature: '{$signPackage.signature}',
+		jsApiList: [
+			'checkJsApi',
+			'chooseWXPay'
+		]
+	});
+</script>
+<!--loading end-->
+    <div class="submitCont">
+		<div class="indexTitle">
+			请确认订单信息
+		</div>
+		<div class="submitText1">
+			<ul>
+				<li class="flex-display flex-alignC">
+					<div class="name">
+						活动时间：
+					</div>
+					<div class="info flex-flex1">
+						{$activ.starttime|date="Y-m-d H:i",###}-{$activ.endtime|date="H:i",###}
+					</div>
+				</li>
+				<li class="flex-display flex-alignC">
+					<div class="name">
+						活动时长：
+					</div>
+					<div class="info flex-flex1">
+						{$activ.longtime}分钟
+					</div>
+				</li>
+				<li class="flex-display flex-alignC">
+					<div class="name">
+						地<b>口口</b>址：
+					</div>
+					<div class="info flex-flex1">
+						{$activ['city']}{$activ['area']}{$activ.address}
+					</div>
+				</li>
+				<li class="flex-display flex-alignC">
+					<div class="name">
+						活动收费：
+					</div>
+					<div class="info flex-flex1">
+						{$activ.money}元
+					</div>
+				</li>
+			</ul>
+		</div>
+
+		<div class="submitText3 ticketBtn" style=" margin-top:1.4rem;">
+			<ul>
+				<li class="flex-display flex-alignC addcurr">
+					<div class="name">
+						可用优惠券：
+					</div>
+					<div class="info flex-flex1">
+						{$coupon_count}张可用
+						<i><img class="iconPlus" src="__PUBLIC__/home/images/icon_plus.png"><img class="iconMinus" src="__PUBLIC__/home/images/icon_minus.png"></i>
+						<!--<img src="__PUBLIC__/home/images/arrow_down_01.png">-->
+					</div>
+				</li>
+			</ul>
+		</div>
+
+		<notempty name="couponlist">
+			<div class="ticketList" style="display: block">
+				<ul>
+					<volist name="couponlist" id="vo">
+					<li>
+						<input id="ra{$i}"  type="radio" name="coupon" data-id="0"  value="{$vo.id}" ><label for="ra{$i}">{$vo.name}（有效期剩余{$vo.expire_days}天）</label>
+					</li>
+					</volist>
+
+				</ul>
+			</div>
+		</notempty>
+
+
+		<div class="submitText3">
+			<ul>
+				<li class="flex-display flex-alignC">
+					<div class="name">
+						还需支付：
+					</div>
+					<div class="info flex-flex1">
+						<input name="need_money" id="need_money" type="hidden">
+						<span id="cost">{$activ.money}</span>元
+					</div>
+				</li>
+			</ul>
+		</div>
+
+		<div class="submitText4">
+
+			<!--<p>会员可享九折优惠</p>-->
+			<p>注解：活动一旦开始概不退款</p>
+		</div>
+
+		<div class="btnBottomBlank"></div>
+		<div class="btnBottom">
+			<a  href="javascript:void(0);" onclick="tar_link();">
+				提交订单，微信支付
+			</a>
+		</div>
+
+	</div>
+
+
+<script>
+
+//异步更新活动需要支付的费用 activid 活动id
+function ajax_cost_activ(activid){
+	var coupon=$("input[name='coupon']:checked").val();
+	if(coupon==undefined){
+		coupon=0;
+	}
+	console.log(coupon);
+	$.ajax({
+		type: 'POST',
+		url: "{:url('Activ/ajax_cost_activ')}" ,
+		data: {coupon_id:coupon,id:activid} ,
+		dataType: "json",
+		success: function(data){
+			$("#cost").text(data);
+			$("#need_money").val(data);
+			$(".loading").hide();
+		},
+	});
+}
+
+$(function(e) {
+//单选框取消选中
+	$("input:radio").click(function(){
+		var v = $(this).data('id');//获取当前单选框控件name 属性值
+		if(v==0){
+			$("input:radio").data('id',0)
+			$(this).data('id',1);
+		}else {
+			$(this).prop('checked',false);
+			$(this).data('id',0);
+		}
+		ajax_cost_activ({$activ['id']})
+
+	})
+
+
+
+	ajax_cost_activ({$activ['id']});
+
+	$(".ticketBtn .addcurr").click(function(){
+		$(".ticketList").slideToggle(100);
+		if( $(".iconPlus").css("display")=='none' ) {
+			$(".iconMinus").css("display","none");
+			$(".iconPlus").css("display","inline");
+		}else {
+			$(".iconPlus").css("display","none");
+			$(".iconMinus").css("display","inline");
+		}
+	});
+});
+
+function tar_link(){
+	show_loading();
+	var activ_id="{$activ['id']}";
+	var need_money =$("#need_money").val();
+
+	if( need_money > 0 ){
+		$.ajax({
+			url : "{:url('Activ/pay_info')}",
+			type : 'POST',
+			dataType : 'json',
+			data : {
+				activ_id:activ_id,
+			},
+			success : function(rdata){
+				hide_loading();
+				if(rdata['status'] == 1){
+					wx.chooseWXPay({
+						timestamp: rdata['timeStamp'],
+						nonceStr: rdata['nonceStr'],
+						package: rdata['package'],
+						signType: 'MD5', // 注意：新版支付接口使用 MD5 加密
+						paySign: rdata['paySign'],
+						success: function (res) {
+							$.ajax({
+								url:"{:url('Activ/pay_success')}",
+								type:"POST",
+								dataType : 'json',
+								data:{
+									activ_id:activ_id,
+								},
+								success: function(rdata){
+
+									if(rdata['status']==1){
+										var url="{:url('Activ/activ_success')}?id="+activ_id;
+
+//												window.location.href=url;
+//												var url="{:url('pay_activ')}?id="+id;
+										$.ajax({
+											url : url,
+											type : 'POST',
+											dataType : 'html',
+											data : {'ajax' : 1,'id' : activ_id},
+											success : function(rdata) {
+												history.pushState(null,'',url)
+												$(".contain").html(rdata);
+											},
+										});
+									}
+									else if(rdata['status']==2){
+										tips("支付失败！");
+									}
+								},
+								error: function(data){
+									tips("支付成功后跳转，操作失败！");
+								}
+							});
+						},
+						cancel: function () {
+							tips("取消支付");
+						}
+					});
+				}else {
+					tips(rdata['msg']);
+				}
+			},
+			error : function(){
+				tips('支付操作失败');
+			}
+		});
+	}else{
+		$.ajax({
+			url : "{:url('Activ/pay_success')}",
+			type : 'POST',
+			dataType: "json",
+			data : {
+				activ_id:activ_id,
+			},
+			success : function(rdata){
+				layer.closeAll();
+				if(rdata['status'] == 1){
+					tips(rdata['msg']);
+					setTimeout(function(){
+						var url="{:url('Activ/activ_success')}?id="+activ_id;
+						$.ajax({
+							url : url,
+							type : 'POST',
+							dataType : 'html',
+							data : {'ajax' : 1,'id' : activ_id},
+							success : function(rdata) {
+								history.pushState(null,'',url)
+								$(".contain").html(rdata);
+							},
+						});
+					},1000);
+				}else{
+					tips(rdata['msg']);
+				}
+			},
+			error : function(){
+				tips('操作失败');
+			}
+		});
+	}
+}
+
+
+
+</script>
+

@@ -1,0 +1,228 @@
+
+<script>
+	/*
+	 * 注意：
+	 * 1. 所有的JS接口只能在公众号绑定的域名下调用，公众号开发者需要先登录微信公众平台进入“公众号设置”的“功能设置”里填写“JS接口安全域名”。
+	 * 2. 如果发现在 Android 不能分享自定义内容，请到官网下载最新的包覆盖安装，Android 自定义分享接口需升级至 6.0.2.58 版本及以上。
+	 * 3. 常见问题及完整 JS-SDK 文档地址：http://mp.weixin.qq.com/wiki/7/aaa137b55fb2e0456bf8dd9148dd613f.html
+	 *
+	 * 开发中遇到问题详见文档“附录5-常见错误及解决办法”解决，如仍未能解决可通过以下渠道反馈：
+	 * 邮箱地址：weixin-open@qq.com
+	 * 邮件主题：【微信JS-SDK反馈】具体问题
+	 * 邮件内容说明：用简明的语言描述问题所在，并交代清楚遇到该问题的场景，可附上截屏图片，微信团队会尽快处理你的反馈。
+	 */
+	wx.config({
+		debug: false,
+		appId: '{$signPackage.appId}',
+		timestamp: '{$signPackage.timestamp}',
+		nonceStr: '{$signPackage.nonceStr}',
+		signature: '{$signPackage.signature}',
+		jsApiList: [
+			'checkJsApi',
+			'chooseWXPay',
+			'getLocation',
+			'openLocation',
+		]
+	});
+</script>
+
+	<div class="exerciseCont">
+		<div class="swiper-container">
+			<div class="ECNav">
+				<ul class="flex-display flex-alignC" id="nav">
+
+
+				</ul>
+			</div>
+
+			<div class="swiper-wrapper">
+
+				<volist name="week_list" id="vo">
+					<div class="swiper-slide">
+						<volist name="vo.actionlist" id="vo1">
+						<div class="ECBlock">
+
+							<div class="ECTitle">
+								{$vo1.shopname}<a href="javascript:;" onclick="look_map('{$vo1.shopname}','{$vo1.addr}','{$vo1.position}')">查看地图</a>
+							</div>
+
+							<volist name="vo1.actionlist" id="vo2">
+								<div class="li flex-display flex-alignC">
+									<a href="javascript:void(0);" onclick="get_detail(this)" data-href="{:U('detail',array('id'=>$vo2['id']))}">
+										<div class="img"><img src="{$vo2.teacherhead|fullimgpath}"></div>
+									</a>
+									<div class="text flex-flex1">
+										<a href="javascript:void(0);" onclick="get_detail(this)" data-href="{:U('detail',array('id'=>$vo2['id']))}">
+											<h1>{$vo2.actionname}</h1>
+											<p>{$vo2.actionabout}</p>
+											<p>{$vo2.starttime}~{$vo2.endtime}</p>
+										</a>
+									</div>
+
+									<if condition="$vo2['is_end'] eq 1">
+										<div class="btn">
+											<a class="disable">等待</a>
+											<b><img src="__PUBLIC__/home/images/event_sign01_full.png"></b>
+										</div>
+
+										<else/>
+										<div class="btn">
+											<a href="javascript:void(0);" style="z-index: 99999" onclick="check_action_appointment_status({$vo2['id']});">预约</a>
+										</div>
+										<if condition="$vo2['yuyue_status'] eq 1">
+											<b><img src="__PUBLIC__/home/images/event_sign01.png"></b>
+										</if>
+									</if>
+
+								</div>
+							</volist>
+						</div>
+						</volist>
+					</div>
+				</volist>
+			</div>
+
+
+
+		</div>
+	</div>
+
+
+
+
+
+
+	<ul style="display: none" id="ulist">
+		<volist name="week_list" id="vo">
+			<div class="list{$i}" >
+				<li class="flex-flex1 swiper-pagination-bullet ">
+				<h1>{$vo.week_num_cn}</h1>
+				<h2>{$vo.date1}</h2>
+				<p>{$vo.week}</p>
+				<b><img src="__PUBLIC__/home/images/exercise_icon01.png"></b>
+				</li>
+			</div>
+		</volist>
+	</ul>
+
+
+
+
+
+<script>
+
+	function look_map(name,addr,option){
+		var option=option.split(",")
+		var latitude =parseFloat(option[0]);
+		var longitude =parseFloat(option[1]);
+		wx.ready(function () {
+			wx.openLocation({
+				latitude: latitude, // 纬度，浮点数，范围为90 ~ -90
+				longitude: longitude, // 经度，浮点数，范围为180 ~ -180。
+				name: name, // 位置名
+				address: addr, // 地址详情说明
+				scale: 14, // 地图缩放级别,整形值,范围从1~28。默认为最大
+				infoUrl: '' // 在查看位置界面底部显示的超链接,可点击跳转
+			});
+		})
+	}
+	function get_detail(obj){
+		$(".loading").show();
+		var url=$(obj).attr("data-href");
+		$.ajax({
+			url : url,
+			type : 'POST',
+			dataType : 'html',
+			data : {'ajax' : 1},
+			success : function(rdata) {
+				$(".loading").hide();
+				history.pushState(null,'',url)
+				$(".contain").html(rdata);
+			},
+		});
+	}
+	//点击团操预约时对能否预约的判断
+	function check_action_appointment_status(actionid){
+//		show_loading();
+		var url="{:U('check_user_action')}";
+		var res= check_tel("{:U('Action/index')}");
+		if(res==false)
+			return;
+		$.ajax({
+			url : url,
+			type : 'POST',
+			data : {
+				"actionid" : actionid
+			},
+			success : function(rdata){
+//				hide_loading();
+				if(rdata['status'] == 1){
+
+					var href="{:U('appointment')}?actionid="+actionid;
+//					window.location.href = href;
+					$.ajax({
+						url : href,
+						type : 'POST',
+						dataType : 'html',
+						data : {'ajax' : 1,'actionid':actionid},
+						success : function(rdata) {
+							$(".myNav").hide();
+							$(".loading").hide();
+							history.pushState(null,'',href)
+							$(".contain").html(rdata);
+						},
+					});
+				}else if(rdata['status'] == 2){
+					tips(rdata['msg']);
+				}
+			},
+			error : function(){
+				tips('操作失败');
+			}
+		});
+	}
+	var sliderIndex
+
+$(function(e) {
+
+
+		$(".loading").hide();
+		var mySwiper = new Swiper('.swiper-container', {
+			pagination : '.ECNav ul',
+			paginationClickable: true,
+			initialSlide:sliderIndex,
+			paginationBulletRender: function (swiper, index, className) {
+				//return '<span class="' + className + '">' + (index + 1) + '</span>';
+				var num=swiper+1;
+				var htmlli = $("#ulist .list"+num).html();
+				return htmlli;
+			},
+			onTransitionEnd:function(swiper){
+				sliderIndex=swiper.activeIndex;
+			}
+		});
+	
+});
+	function check_tel(table){
+		var tel='{$user.tel}'
+		if(!tel){
+			var url="{:U('vip/bind_tel')}";
+			$.ajax({
+				url : url,
+				type : 'POST',
+				dataType : 'html',
+				data : {'ajax' : 1,table:table},
+				success : function(rdata) {
+					layer.closeAll();
+					history.pushState(null,'',url)
+					$(".contain").html(rdata);
+				},
+
+			});
+
+			return false;
+		}
+	}
+</script>
+
+

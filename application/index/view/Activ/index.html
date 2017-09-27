@@ -1,0 +1,301 @@
+
+<script>
+	/*
+	 * 注意：
+	 * 1. 所有的JS接口只能在公众号绑定的域名下调用，公众号开发者需要先登录微信公众平台进入“公众号设置”的“功能设置”里填写“JS接口安全域名”。
+	 * 2. 如果发现在 Android 不能分享自定义内容，请到官网下载最新的包覆盖安装，Android 自定义分享接口需升级至 6.0.2.58 版本及以上。
+	 * 3. 常见问题及完整 JS-SDK 文档地址：http://mp.weixin.qq.com/wiki/7/aaa137b55fb2e0456bf8dd9148dd613f.html
+	 *
+	 * 开发中遇到问题详见文档“附录5-常见错误及解决办法”解决，如仍未能解决可通过以下渠道反馈：
+	 * 邮箱地址：weixin-open@qq.com
+	 * 邮件主题：【微信JS-SDK反馈】具体问题
+	 * 邮件内容说明：用简明的语言描述问题所在，并交代清楚遇到该问题的场景，可附上截屏图片，微信团队会尽快处理你的反馈。
+	 */
+	wx.config({
+		debug: false,
+		appId: '{$signPackage.appId}',
+		timestamp: '{$signPackage.timestamp}',
+		nonceStr: '{$signPackage.nonceStr}',
+		signature: '{$signPackage.signature}',
+		jsApiList: [
+			'checkJsApi',
+			'chooseWXPay',
+			'getLocation',
+			'openLocation',
+		]
+	});
+</script>
+
+
+
+<div class="eventCont">
+	<div class="swiper-container">
+		<div class="topNav">
+			<ul class="flex-display flex-alignC">
+
+			</ul>
+		</div>
+
+
+		<div class="list swiper-wrapper">
+			<div class="swiper-slide">
+				<ul>
+					<volist name="activlist0" id="vo">
+						<li>
+							<div class="img">
+								<a data-href="{:U('detail',array('id'=>$vo['id'],'act'=>'detail'))}">
+									<img src="{$vo['small_img']|fullimgpath}"></a>
+								<div class="tips">
+									<a class="tipBlock" href="javascript:void (0);">
+										<h2>{$vo.activname}</h2>
+										<h1> {$vo.starttime|date="m月d日",###} 限{$vo.limit_people}人</h1>
+										<p>{$vo.activabout}</p>
+										<div class="bar">
+											<b style=" width:{$vo.proccess}%"></b>
+										</div>
+									</a>
+									<if condition="($vo.proccess eq 100) AND ($vo.over eq 0) ">
+										<a class="btns over" href="javascript:;">等待</a>
+										<elseif condition="$vo.over eq 1 " />
+										<a class="btns over">结束</a>
+										<else/>
+										<a class="btns btn" href="javascript:void (0);" onclick="check_enroll({$vo['id']});">报名</a>
+									</if>
+
+								</div>
+								<if condition="($vo.proccess egt 50) AND ($vo.proccess neq 100) AND ($vo.over eq 0)">
+									<b><img src="__PUBLIC__/home/images/event_sign01.png"></b>
+									<elseif condition="($vo.proccess eq 100) AND ($vo.over eq 0) " />
+									<b><img src="__PUBLIC__/home/images/event_sign01_full.png"></b>
+								</if>
+							</div>
+						</li>
+					</volist>
+
+				</ul>
+			</div>
+			<div class="swiper-slide">
+				<ul>
+					<volist name="activlist1" id="vo">
+						<li>
+							<div class="img">
+								<a data-href="{:U('detail',array('id'=>$vo['id'],'act'=>'detail'))}">
+									<img src="{$vo['small_img']|fullimgpath}"></a>
+								<div class="tips">
+									<a class="tipBlock" href="javascript:void (0);">
+										<h2>{$vo.activname}</h2>
+										<h1> {$vo.starttime|date="m月d日",###} 限{$vo.limit_people}人</h1>
+										<p>{$vo.activabout}</p>
+										<div class="bar">
+											<b style=" width:{$vo.proccess}%"></b>
+										</div>
+									</a>
+									<if condition="($vo.proccess eq 100) AND ($vo.over eq 0) ">
+										<a class="btns over" href="javascript:;">等待</a>
+										<elseif condition="$vo.over eq 1 " />
+										<a class="btns over">结束</a>
+										<else/>
+										<a class="btns btn" href="javascript:void (0);" onclick="check_enroll({$vo['id']});">报名</a>
+									</if>
+
+								</div>
+								<if condition="($vo.proccess egt 50) AND ($vo.proccess neq 100) AND ($vo.over eq 0)">
+									<b><img src="__PUBLIC__/home/images/event_sign01.png"></b>
+									<elseif condition="($vo.proccess eq 100) AND ($vo.over eq 0) " />
+									<b><img src="__PUBLIC__/home/images/event_sign01_full.png"></b>
+								</if>
+							</div>
+						</li>
+					</volist>
+				</ul>
+			</div>
+			<div class="swiper-slide">
+				<ul>
+					<volist name="activlist2" id="vo">
+						<li>
+							<div class="img">
+								<a data-href="{:U('detail',array('id'=>$vo['id'],'act'=>'detail'))}">
+									<img src="{$vo['small_img']|fullimgpath}">
+								</a>
+								<div class="tips">
+									<a class="tipBlock" href="javascript:void (0);">
+										<h2>{$vo.activname}</h2>
+										<h1> {$vo.starttime|date="m月d日",###} 限{$vo.limit_people}人</h1>
+										<p>{$vo.activabout}</p>
+										<div class="bar">
+											<b style=" width:{$vo.proccess}%"></b>
+										</div>
+									</a>
+									<if condition="($vo.proccess eq 100) AND ($vo.over eq 0) ">
+										<a class="btns over" href="javascript:;">等待</a>
+										<elseif condition="$vo.over eq 1 " />
+										<a class="btns over">结束</a>
+										<else/>
+										<a class="btns btn" href="javascript:;" onclick="check_enroll({$vo['id']});">报名</a>
+									</if>
+
+								</div>
+								<if condition="($vo.proccess egt 50) AND ($vo.proccess neq 100) AND ($vo.over eq 0)">
+									<b><img src="__PUBLIC__/home/images/event_sign01.png"></b>
+									<elseif condition="($vo.proccess eq 100) AND ($vo.over eq 0) " />
+									<b><img src="__PUBLIC__/home/images/event_sign01_full.png"></b>
+								</if>
+							</div>
+						</li>
+					</volist>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+
+
+
+
+
+
+<div class="btnBottomBlank"></div>
+    <div class="loading2">
+    	<b></b>
+    </div>
+<script type="text/javascript">
+
+
+	function look_map(name,addr,option){
+		var option=option.split(",")
+		var latitude =parseFloat(option[0]);
+		var longitude =parseFloat(option[1]);
+		wx.ready(function () {
+			wx.openLocation({
+				latitude: latitude, // 纬度，浮点数，范围为90 ~ -90
+				longitude: longitude, // 经度，浮点数，范围为180 ~ -180。
+				name: name, // 位置名
+				address: addr, // 地址详情说明
+				scale: 14, // 地图缩放级别,整形值,范围从1~28。默认为最大
+				infoUrl: '' // 在查看位置界面底部显示的超链接,可点击跳转
+			});
+		})
+	}
+	function check_enroll(id){
+		var res= check_tel("{:U('Activ/index')}");
+		if(res==false)
+			return
+		$.ajax({
+			type: 'POST',
+			url: "{:U('check_enroll')}" ,
+			data: {id:id} ,
+			dataType:"json" ,
+			success: function(data){
+				if(data.status <0 ){
+
+					tips(data.msg);
+					return false;
+				}else{
+
+					var url="{:U('Vip/order_pay')}?table=Activ:pay_activ&id="+id;
+					location.href=url;
+
+//					$.ajax({
+//						url : url,
+//						type : 'POST',
+//						dataType : 'html',
+//						data : {'ajax' : 1,id:id,table:'Activ:pay_activ'},
+//						success : function(rdata) {
+//							history.pushState(null,'',url)
+//							$(".contain").html(rdata);
+//						},
+//
+//					});
+				}
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				tips('服务器连接异常');
+			}
+
+		});
+		return false;
+	}
+	function check_tel(table){
+		var tel='{$user.tel}'
+		if(!tel){
+			var url="{:U('vip/bind_tel')}";
+			$.ajax({
+				url : url,
+				type : 'POST',
+				dataType : 'html',
+				data : {'ajax' : 1,table:table},
+				success : function(rdata) {
+					layer.closeAll();
+					history.pushState(null,'',url)
+					$(".contain").html(rdata);
+				},
+
+			});
+
+			return false;
+		}
+	}
+
+var ais_end=1;//判断是否加载完成
+
+var aDStatus = 1; //判断是否还有数据未加载
+
+//选择类型
+
+
+$(function(){
+	$(".loading").hide();
+	 sliderIndex = 0;
+	var navs = ['全部','线上','线下']
+
+	var mySwiper = new Swiper('.swiper-container', {
+		pagination : '.topNav ul',
+		paginationClickable: true,
+		initialSlide:sliderIndex,
+		paginationBulletRender: function (swiper, index, className) {
+			//return '<span class="' + className + '">' + (index + 1) + '</span>';
+			//alert(className);
+			var htmlli = '';
+
+			htmlli += '<li class="flex-flex1 '+index+'">'+navs[swiper]+'</li>';
+
+			return htmlli;
+		},
+		onTransitionEnd:function(swiper){
+			//swiper.activeIndex;
+		}
+	});
+
+	$(".img img").click(function () {
+		var url=$(this).parent().attr("data-href");
+		$.ajax({
+			url : url,
+			type : 'POST',
+			dataType : 'html',
+			data : {'ajax' : 1},
+			success : function(rdata) {
+				$(".loading").hide();
+				history.pushState(null,'',url)
+				$(".contain").html(rdata);
+			},
+		});
+	})
+//	var range = 0;             //距下边界长度/单位px
+//	var totalheight = 0;                   //主体元素
+//
+//	$(window).unbind("scroll");
+//	ais_end=0;
+//	$(window).scroll(function(){
+//
+//		var srollPos = $(window).scrollTop();  //滚动条距顶部距离(页面超出窗口的高度
+//		totalheight = parseFloat($(window).height()) + parseFloat(srollPos);
+//		if(($(document).height()-range) <= totalheight && $(".loading2").is(":hidden") && aDStatus == 1 && ais_end==1) {
+//			ais_end=0;
+//			ajax_activ(apage);
+//
+//		}
+//	});
+});
+</script> 

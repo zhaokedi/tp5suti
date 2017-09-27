@@ -1,0 +1,91 @@
+
+
+	<div class="myACCont">
+    	
+        <div class="topInfo">
+        	您确定要取消吗
+        </div>
+        
+        <div class="list">
+        	<ul>
+            	<li class="flex-display flex-alignC">
+                	<div class="name">
+                    	预约内容：
+                    </div>
+                    <div class="text flex-flex1">
+						{$onelist.actionname}
+                    </div>
+                </li>
+                <li class="flex-display flex-alignC">
+                	<div class="name">
+                    	时间：
+                    </div>
+                    <div class="text flex-flex1">
+						{$onelist.yuyuemonth}&nbsp;{$onelist.yuyuehours}-{$onelist.yuyueendhours}
+                    </div>
+                </li>
+                <li class="flex-display flex-alignC">
+                	<div class="name">
+                    	门店：
+                    </div>
+                    <div class="text flex-flex1">
+						{$onelist.shopname}
+                    </div>
+                </li>
+                <li class="flex-display flex-alignC">
+                	<div class="name">
+                    	门店地址：
+                    </div>
+                    <div class="text flex-flex1">
+                    	{$onelist.address}
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="btn">
+        	<a href="javascript:;" onclick="cancel_appointment({$onelist.id})">确认取消</a>
+        </div>
+        
+        <div class="btnBottomBlank"></div>
+        <div class="btnBottom">
+        	<a href="javascript:ajax_load('{:url('index')}')">
+            	返回首页
+            </a>
+        </div>
+        
+    </div>
+    
+
+<script>
+	//器械健身的取消预约
+	function cancel_appointment(id){
+		$.ajax({
+			url : "{:url('Index/cancel_appointment')}",
+			type : 'POST',
+			data : {
+				"id" : id,
+			},
+			success : function(rdata){
+//				hide_loading();
+				if(rdata['status'] == 1){
+					tips(rdata['msg'],2000);
+//					tips(rdata['msg']);
+					setTimeout(function(){
+						var url="{:url('vip/my_appointment')}";
+						ajax_load(url);
+					},2000)
+				}else if(rdata['status'] == 2){
+					tips(rdata['msg']);
+				}
+			},
+			error : function(){
+				tips("操作失败");
+			}
+		});
+	}
+jQuery(document).ready(function(e) {
+	$(".loading").hide();
+
+});
+</script>
+

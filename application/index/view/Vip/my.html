@@ -1,0 +1,162 @@
+
+<style>
+
+	.myCont0 .cardImg .card .ttt p {
+		font-size: 0.4rem;
+		color: #333;
+		/*color: #fff;*/
+		line-height: 1.4;
+	}
+	.layui-layer-content{
+		/*color: #0a0a0a;*/
+	}
+</style>
+
+	<div class="myCont0">
+
+		<div class="cardImg">
+			<div class="card">
+				<img src="__PUBLIC__/home/uploadfile/images/{$user['card_img']}" style="border-radius: 5px">
+
+				<if condition="$vip_status.status neq -2">
+					<div class="text {$user.ttt}">
+						<p>{$user.nickname}</p>
+						<p>No.1{$user.card_num}</p>
+						<p>已获得积分：{$user.point}</p>
+					</div>
+
+				</if>
+				<div class="cardStyle">
+					<p style="color:{$vipcard['color']}">{$vipcard['vipname']}</p>
+
+				</div>
+				<b><img src="{$user.headurl}" style="height: 3rem"></b>
+			</div>
+		</div>
+
+		<div class="MCZCont1">
+			<a data-href="{:U('my_card')}" >
+				<span style="color: {$user.color}"><if condition="$vip_status.status eq -2">你离开肌动塑体{$ex_days}天了<else/>剩余{$user.has_days}天到期</if></span><span class="fr">立即续费 <i class="fa fa-angle-right" aria-hidden="true"></i></span>
+			</a>
+		</div>
+		<div class="MCZCont2">
+			<ul class="my_info">
+				<li>
+					<a data-href="{:U('Index/appo_count')}">
+						我的预约统计<span class="fr"><i class="fa fa-angle-right" aria-hidden="true"></i></span>
+					</a>
+				</li>
+				<li>
+					<a data-href="{:U('Index/index_shop')}">
+						适用门店<span class="fr">{$user.shopname} <i class="fa fa-angle-right" aria-hidden="true"></i></span>
+					</a>
+				</li>
+				<li>
+					<a data-href="">
+						我的会员等级<span class="fr">{$user.levelname}
+						<!--<i class="fa fa-angle-right" aria-hidden="true"></i>-->
+					</span>
+					</a>
+				</li>
+				<li>
+					<a data-href="{:U('tel_change')}">
+						绑定手机号<span class="fr">{$user.tel} <i class="fa fa-angle-right" aria-hidden="true"></i></span>
+					</a>
+				</li>
+				<li>
+					<a data-href="{:U('Share/index')}">
+						我的优惠券<span class="fr">{$user['coupon_num']} <i class="fa fa-angle-right" aria-hidden="true"></i></span>
+					</a>
+				</li>
+				<if condition="($userdata.autobrozen_show eq 1) or ($userdata.is_autobrozen eq 2)" >
+					<li >
+						<a data-href="" onclick="autobrozen(this)" data-status="{$userdata.is_autobrozen}">
+							<span id="autobrozen">
+								<if condition="$userdata.is_autobrozen eq 1">
+								自助停卡中
+									<elseif condition="$userdata.is_autobrozen eq 2"/>
+									停卡中
+									<else/>
+								自助停卡
+								</if>
+							</span>
+							<span class="fr">剩余<i id="autobrozen_num">{$userdata['autobrozen_num']}</i>次
+							<!--<i class="fa fa-angle-right" aria-hidden="true"></i>-->
+						</span>
+						</a>
+					</li>
+				</if>
+			</ul>
+		</div>
+        
+        
+    </div>
+
+
+
+
+
+	
+
+
+<script>
+	function autobrozen(obj){
+		var autobrozen_num={$userdata['autobrozen_num']};
+		var is_autobrozen=$(obj).data('status');
+		if(autobrozen_num<=0 || is_autobrozen != 0){
+			return
+		}
+
+		layer.msg('确认停卡？', {
+			time: 0 //不自动关闭
+			,btn: ['确认','取消'] //按钮
+			,yes: function(index){
+
+				layer.close(index)
+
+				$.ajax({
+					type: "post",
+					url: "{:U('autobrozen')}",
+					dataType: "json",
+					data: {},
+					success: function (msg) {
+						layer.closeAll();
+						tips('冻结成功');
+						$("#autobrozen_num").text(parseInt(autobrozen_num)-1)
+						$("#autobrozen").text('自助停卡中')
+						$(obj).data('status',1)
+//						$(obj).parent().hide();
+					},
+				})
+		}
+		});
+	}
+
+jQuery(document).ready(function(e) {
+
+	$(".loading").hide();
+
+	$(".MCZCont1 a").click(function () {
+
+		var url=$(this).attr("data-href");
+
+		$(".loading").show();
+		ajax_load(url);
+
+	})
+	$(".my_info li").click(function () {
+
+		var url=$(this).find('a').attr("data-href");
+
+		if(url==''){
+			return
+		}
+
+		$(".loading").show();
+		ajax_load(url);
+
+	})
+
+});
+</script>
+

@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>WebUploader演示</title>
+
+
+
+
+    <link rel="stylesheet" type="text/css" href="../../css/webuploader.css"/>
+    <link rel="stylesheet" type="text/css" href="./style.css"/>
+</head>
+<body>
+<div id="wrapper">
+    <div id="container">
+        <!--头部，相册选择和格式选择-->
+
+
+        <div id="uploader">
+
+
+            <div style="margin: 5px; min-height: 200px;">
+
+
+                <ul class="filelist" id="list2" >
+                    <li  class="state-complete"><p class="title">1.jpg</p>
+
+                        <p class="imgWrap"><img src=" "></p>
+
+                        <p class="progress"><span style="display: none; width: 0px;"></span></p>
+
+                        <span
+                                class="success"></span>
+
+                    </li>
+                    <li ><p class="title">23471090269889561.jpg</p>
+
+                        <p class="imgWrap"><img src=" "></p>
+
+                        <p class="progress"><span></span></p>
+  <span
+          class="success"></span>
+                        <div class="file-panel" style="height:30px;"><span class="cancel">删除</span><span
+                                class="rotateRight">向右旋转</span><span class="rotateLeft">向左旋转</span></div>
+                    </li>
+                </ul>
+
+
+            </div>
+
+            <div class="statusBar">
+
+                <div class="btns">
+
+                    <div class="webuploader-pick">继续添加</div>
+                    <div class="uploadBtn ">开始上传</div>
+
+                </div>
+            </div>
+
+
+            <div class="queueList">
+                <div id="dndArea" class="placeholder">
+                    <div id="filePicker"></div>
+                    <p>或将照片拖到这里，单次最多可选300张</p>
+                </div>
+            </div>
+            <div class="statusBar" style="display:none;">
+                <div class="progress">
+                    <span class="text">0%</span>
+                    <span class="percentage"></span>
+                </div>
+                <div class="info"></div>
+                <div class="btns">
+                    <div id="filePicker2"></div>
+                    <div class="uploadBtn">开始上传</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="./jquery.js"></script>
+<script type="text/javascript" src="./jquery.dragsort-0.5.2.min.js"></script>
+
+<script type="text/javascript" src="../dist/webuploader.js"></script>
+<script type="text/javascript" src="./upload.js"></script>
+<script type="text/javascript">
+
+    $("#list2").dragsort({ dragSelector: "li", dragBetween: true, dragEnd: saveOrder, placeHolderTemplate: "<li class='placeHolder'><div></div></li>" });
+
+
+    function saveOrder() {
+        var data = $("#list1 li").map(function() { return $(this).children().html(); }).get();
+        $("input[name=list1SortOrder]").val(data.join("|"));
+    };
+</script>
+
+
+
+</body>
+</html>

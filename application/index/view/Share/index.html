@@ -1,0 +1,147 @@
+<div class="MTCont">
+
+	<div class="indexTitle">
+		我的优惠券
+	</div>
+
+	<div class="cont1">
+		<img src="__PUBLIC__/home/images/gift_img.png">
+		<h1>邀请新朋友各得等额奖励</h1>
+		<a data-href="{:url('index_share')}" onclick="go_invite(this)">去邀请</a>
+	</div>
+
+	<div class="cont2">
+		<div class="c2title">
+			已获得
+		</div>
+		<div class="list">
+			<ul>
+				<volist name="couponlist" id="vo">
+				<li id="{$vo['id']}">
+					<if condition="$vo.type eq 0" >
+						<div class="ltBlock">
+							<b class="lititle2">代金券</b> <span class="fr">￥{$vo.money}</span>
+						</div>
+						<p>&nbsp;</p>
+						<p>有效期至{$vo.endtime}</p>
+						<p>适用门店:{$vo.shopname}</p>
+
+						<a class=""  data-href="{:url('Vip/my_card')}"  onclick="gobuycard(this)">点击<br>使用</a>
+						<elseif condition="$vo.type eq 1" />
+						<div class="ltBlock">
+							<b class="lititle2">{$vo.name}</b> <span class="fr">{$vo.expire_day}天</span>
+						</div>
+						<p>&nbsp;</p>
+						<p>有效期至{$vo.endtime}</p>
+						<p>适用门店:{$vo.shopname}</p>
+
+						<a class="layerBtn" href="javascript:;">点击<br>使用</a>
+
+						<elseif condition="$vo.type eq 2" />
+						<div class="ltBlock">
+							<b class="lititle1">{$vo.name}</b>
+						</div>
+						<p>凭此优惠券到指定门店领{$vo.change_name}</p>
+						<p>有效期至{$vo.endtime}</p>
+						<p>适用门店:{$vo.shopname}</p>
+						<a class="layerBtn" href="javascript:;">点击<br>使用</a>
+					</if>
+
+					<div class="ticketlayer">
+						<!--<p>适用门店：<span>{{value.shop}}</span></p>-->
+						<if condition="$vo.type eq 2" >
+							<p>领取内容：<span>{$vo.change_name}</span></p>
+						</if>
+						<a href="javascript:;" onclick="use_coupon({$vo['id']});">确认使用</a>
+						<p>注意：<span>点击确认使用后，此券将作废</span></p>
+					</div>
+				</li>
+				</volist>
+			</ul>
+		</div>
+	</div>
+
+
+</div>
+
+
+
+
+	<!--contain end-->
+<script>
+$(function(){
+	$(".loading").hide();
+})
+$(".cont2 .list li .layerBtn").click(function(){
+	layer.open({
+		title:'',
+		closeBtn:0,
+//		shade: false,
+		type:1,
+		content:$(this).parent().find(".ticketlayer"),
+		shadeClose:true,
+		skin:"MTLayer"
+	});
+});
+
+//	$(".cont2 .list li .ticketlayer a").click(function(){
+//		layer.closeAll();
+//	});
+	function use_coupon(id){
+
+
+		var url="{:url('use_coupon')}";
+		$.ajax({
+			url : url,
+			type : 'POST',
+			dataType : 'json',
+			data : {'id' : id},
+			success : function(rdata) {
+				if (rdata.status ==1){
+
+
+					tips("使用成功");
+					setTimeout(function(){
+						layer.closeAll();
+						$("#"+id).remove();
+					},1000)
+				}
+			},
+		});
+	}
+	function gobuycard(obj){
+		var url=$(obj).attr("data-href");
+		$.ajax({
+			url : url,
+			type : 'POST',
+			dataType : 'html',
+			data : {'ajax' : 1},
+			success : function(rdata) {
+				$(".loading").hide();
+				history.pushState(null,'',url)
+				$(".contain").html(rdata);
+			},
+
+		});
+	}
+//	$(".ticketlist li").click(function () {
+//		$(".loading").show();
+//		var url=$(this).find('a').attr("data-href");
+//	})
+	function go_invite(obj){
+		$(".loading").show();
+		var url=$(obj).attr("data-href");
+		$.ajax({
+			url : url,
+			type : 'POST',
+			dataType : 'html',
+			data : {'ajax' : 1},
+			success : function(rdata) {
+				$(".loading").hide();
+				history.pushState(null,'',url)
+				$(".contain").html(rdata);
+			},
+
+		});
+	}
+</script>

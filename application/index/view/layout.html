@@ -1,0 +1,299 @@
+<!doctype html>
+<html style=" font-size:20px;">
+<head>
+    <meta charset="utf-8">
+    <title>肌动塑体</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, user-scalable=no, maximum-scale=1.0" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+
+    <link type="text/css" rel="stylesheet" href="__PUBLIC__/home/css/reset.css" />
+    <link type="text/css" rel="stylesheet" href="__PUBLIC__/home/css/mobiscroll.custom-3.0.0-beta2.min.css"/>
+    <link type="text/css" rel="stylesheet" href="__PUBLIC__/home/css/style.css" />
+    <link type="text/css" rel="stylesheet" href="__PUBLIC__/home/css/swiper-3.3.1.min.css">
+    <link type="text/css" rel="stylesheet" href="__PUBLIC__/home/css/font-awesome.css">
+
+    <script type="text/javascript" src="__PUBLIC__/ht/js/jquery.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/home/js/template.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/home/layer/layer.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/home/js/swiper-3.3.1.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/home/js/jquery.raty.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/home/js/mobiscroll.custom-3.0.0-beta2.min.js"></script>
+
+    <!-- 微信微信支付 -->
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <!-- 引入自己写的js  -->
+    <!--<script type="text/javascript" src="__PUBLIC__/home/js/doing_self.js"></script>-->
+    <script>
+        function show_loading(){
+            layer.load(1);
+        }
+
+        function hide_loading(){
+            layer.closeAll();
+        }
+        function tips(text,time)	{
+            if(!arguments[1]) time = 3000;
+            var html = "<p>"+text+"</p>";
+            $(".topFixed").append(html);
+            $(".topFixed p:last-child").slideDown().delay(time).slideUp('fast');
+        }
+    </script>
+</head>
+
+<body>
+<script>
+    var CWidth = $("body").width();
+
+    var FSize = CWidth/375*20;
+    $("html").css("font-size",FSize);
+</script>
+
+<div class="topFixed">
+
+</div>
+    <div class="contain">
+
+{__CONTENT__}
+    </div>
+    <!--bottom-->
+
+    <div class="bottom">
+        <ul >
+            <li  class='<eq name="kind" value="1">curr</eq>'>
+                <a data-href="{:url('Index/index_shop')}" onclick="ajax_detail(this,1)">
+                    <img class="nimg" src="__PUBLIC__/home/images/bottom_icon01.png">
+                    <img class="himg" src="__PUBLIC__/home/images/bottom_icon01_h.png">
+                    <p>器械</p>
+                </a>
+            </li>
+            <li  class='<eq name="kind" value="2">curr</eq>'>
+                <a data-href="{:url('Action/index')}" onclick="ajax_detail(this,1)">
+                    <img class="nimg" src="__PUBLIC__/home/images/bottom_icon02.png">
+                    <img class="himg" src="__PUBLIC__/home/images/bottom_icon02_h.png">
+                    <p>团操</p>
+                </a>
+            </li>
+            <li  class='<eq name="kind" value="3">curr</eq>'>
+                <a data-href="{:url('Activ/index')}"  onclick="ajax_detail(this,1)">
+                    <img class="nimg" src="__PUBLIC__/home/images/bottom_icon03.png">
+                    <img class="himg" src="__PUBLIC__/home/images/bottom_icon03_h.png">
+                    <p>活动</p>
+                </a>
+            </li>
+            <li  class='<eq name="kind" value="4">curr</eq>'>
+                <a d-href="{:url('Mall/index')}" data-href=""  onclick="ajax_detail(this,1)">
+                    <img class="nimg" src="__PUBLIC__/home/images/bottom_icon04.png">
+                    <img class="himg" src="__PUBLIC__/home/images/bottom_icon04_h.png">
+                    <p>商城</p>
+                </a>
+            </li>
+            <li class='<eq name="kind" value="5">curr</eq>'>
+                <a class="myNavBtn" href="javascript:;">
+                    <img class="nimg" src="__PUBLIC__/home/images/bottom_icon05.png">
+                    <img class="himg" src="__PUBLIC__/home/images/bottom_icon05_h.png">
+                    <p>我的</p>
+                </a>
+                <dl class="myNav">
+                    <dd><a data-href="{:url('Vip/index')}" onclick="ajax_detail(this,2)">会员中心</a></dd>
+                    <dd><a data-href="{:url('Vip/my_appointment')}" onclick="ajax_detail(this,2)">我的预约</a></dd>
+                    <dd><a data-href="{:url('Vip/my_plan')}" onclick="ajax_detail(this,2)">健身计划</a></dd>
+                </dl>
+            </li>
+            <li class="clear"></li>
+        </ul>
+    </div>
+    <!--bottom end-->
+
+<div class="loading">
+    <b></b>
+</div>
+
+<script>
+    $(function(){
+        $(".myNavBtn").click(function(){
+            $(".myNav").stop().slideToggle('fast');
+        });
+//        $(".loading").hide();
+        if (history.pushState) {
+            window.addEventListener("popstate", function() {
+                $(".loading").show();
+                var url=location.href;
+                $.ajax({
+                    url : url,
+                    type : 'POST',
+                    dataType : 'html',
+                    data : {'ajax' : 1},
+                    success : function(rdata) {
+                        $(".topFixed").html("");
+                        $(window).unbind("scroll");
+                        layer.closeAll();
+                        $(".loading").hide();
+                        $(".contain").html(rdata);
+                    },
+                });
+            });
+        }
+    })
+    //异步加载替换 无刷新
+    function ajax_load(url){
+        $(".topFixed").html("");
+        $(window).unbind("scroll");
+        $.ajax({
+            url : url,
+            type : 'POST',
+            dataType : 'html',
+            data : {'ajax' : 1},
+            success : function(rdata) {
+                layer.closeAll();
+                $(".loading").hide();
+                history.pushState(null,'',url)
+                $(".contain").html(rdata);
+            },
+
+        });
+    }
+
+    function ajax_detail(obj,level){
+        var url=$(obj).attr("data-href");
+
+        if(url==''){
+            tips('此功能尚未开放');
+            return
+        }
+        $(".loading").show();
+        var li=$(obj).parent();
+        if(level==2){
+            li=$(obj).parent().parent().parent();
+        }
+        li.siblings("li").removeClass('curr');
+        li.addClass('curr');
+        $('html, body').animate({scrollTop:0}, 'fast');
+
+        ajax_load(url);
+        $(".myNav").hide();
+    }
+
+
+
+    function self_appointment(){
+        var myDate = new Date();
+        var time = myDate.toLocaleDateString()
+//		console.log(time);return;
+        var near_shop_id = $("#hid_near_id").val();
+        var type_id = $("#hid_type_to").val();
+        show_loading();
+
+        if( type_id == 1 ){
+            $.ajax({
+                url : "{:('check_user_appointment')}",
+                type : 'POST',
+                dataType : 'json',
+                data : {
+                    'shopid' : near_shop_id,
+                    'yuyuetime' : time
+                },
+                success : function(rdata) {
+                    hide_loading();
+                    if (rdata['status'] == 1) {
+                        window.location.href = "./index.php?m=Index&c=Index&a=appointment&time="+ time + "&shopid=" + near_shop_id;
+                    } else if (rdata['status'] == 2) {
+                        tips(rdata['msg']);
+                    }
+                },
+                error : function() {
+                    tips('操作失败');
+                }
+            });
+        }else if(type_id == 2){
+            //尊贵会员的跳转
+            $.ajax({
+                url : './index.php?m=Index&c=Vip&a=onekey',
+                type : 'POST',
+                dataType : 'json',
+                data : {
+                    'yuyuetime' : time
+                },
+                success : function(rdata) {
+                    hide_loading();
+                    if (rdata['status'] == 1) {
+                        window.location.href = "./index.php?m=Index&c=Vip&a=vip_appointment_num&time="+ time;
+                    } else if (rdata['status'] == 2) {
+                        tips(rdata['errormsg']);
+                    }
+                },
+                error : function() {
+                    tips('操作失败');
+                }
+            });
+        }
+
+    }
+   function gotonext(time,table,shopid){
+//        var time = $(".DP").val();
+        var res= check_tel(table);
+        if(res==false)
+            return
+//        var near_shop_id = $("#shop_near_id").val();
+        var type_id = $("#hid_type_to").val();
+
+        show_loading();
+
+        if( type_id == 1 ){
+            $.ajax({
+                url : "{:url('check_user_appointment')}",
+                type : 'POST',
+                dataType : 'json',
+                data : {
+                    'shopid' : shopid,
+                    'yuyuetime' : time
+                },
+                success : function(rdata) {
+                    hide_loading();
+                    if (rdata['status'] == 1) {
+                        var href="{:url('index/appointment')}?time="+time + "&shopid=" + shopid;
+                        window.location.href = href;
+                    } else if (rdata['status'] == 2) {
+                        tips(rdata['msg']);
+                    }
+                },
+                error : function() {
+                    tips('操作失败');
+                }
+            });
+        }else if(type_id == 2){
+            //尊贵会员的跳转
+            $.ajax({
+                url : './index.php?m=Index&c=Vip&a=onekey',
+                type : 'POST',
+                dataType : 'json',
+                data : {
+                    'yuyuetime' : time
+                },
+                success : function(rdata) {
+                    hide_loading();
+                    if (rdata['status'] == 1) {
+                        window.location.href = "./index.php?m=Index&c=Vip&a=vip_appointment_num&time="+ time;
+                    } else if (rdata['status'] == 2) {
+                        tips(rdata['errormsg']);
+                    }
+                },
+                error : function() {
+                    tips('操作失败');
+                }
+            });
+        }
+
+    }
+
+</script>
+
+
+</body>
+</html>
+
+
+
+
+

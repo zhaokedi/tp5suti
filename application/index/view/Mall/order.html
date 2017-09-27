@@ -1,0 +1,94 @@
+
+	<div class="orderCont">
+		<div class="orderNav">
+			<ul class=" flex-display flex-alignC">
+				<li class="flex-flex1 curr"  onclick="ajax_order_list(this,'ALL')">全部</li>
+				<li class="flex-flex1" onclick="ajax_order_list(this,'WAITPAY')">待付款</li>
+				<li class="flex-flex1" onclick="ajax_order_list(this,'WAITSEND')">待发货</li>
+				<li class="flex-flex1" onclick="ajax_order_list(this,'WAITRECEIVE')">待收货</li>
+				<li class="flex-flex1" onclick="ajax_order_list(this,'WAITCCOMMENT')">已完成</li>
+			</ul>
+		</div>
+
+		<div class="orderList">
+			<ul id="orderul">
+
+				<!--<li>-->
+					<!--<div class="lititle">-->
+						<!--下单时间：<span class="sp1">2016-12-23 15:46:00</span><span class="fr sp1">已完成</span>-->
+					<!--</div>-->
+					<!--<a href="detail.html" class="cont flex-display flex-alignC">-->
+						<!--<div class="img">-->
+							<!--<img src="__PUBLIC__/home/images/order_img01.jpg">-->
+						<!--</div>-->
+						<!--<div class="text flex-flex1">-->
+							<!--<h1>煮一口牛肉</h1>-->
+							<!--<p>商品简单介绍商品简单介绍商品简单介绍商品简单介绍商品简单介绍商品简单介绍</p>-->
+						<!--</div>-->
+					<!--</a>-->
+					<!--<div class="btns flex-display flex-alignC">-->
+						<!--<div class="flex-flex1"><span class="sp1">合计：</span>￥198</div>-->
+						<!--<div><a href="#">取消订单</a>-->
+							<!--<a href="#">马上付款</a>-->
+							<!--&lt;!&ndash;<a href="#">确认收货</a>&ndash;&gt;-->
+
+							<!--&lt;!&ndash;<a href="#">联系售后</a>&ndash;&gt;-->
+						<!--</div>-->
+					<!--</div>-->
+				<!--</li>-->
+
+
+			</ul>
+		</div>
+
+	</div>
+    
+
+
+<script>
+	function ajax_order_list(obj,type){
+
+		if($(obj).hasClass('curr'))
+			return
+
+//		console.log($(obj).hasClass('curr'))
+		$(".loading").show();
+		$.ajax({
+			type: 'POST',
+			url: "{:url('ajax_order_list')}" ,
+			data: {ajax:1,type:type} ,
+			dataType:"html" ,
+			success: function(data){
+				$(obj).addClass("curr").siblings().removeClass("curr");
+				$("#orderul").html(data);
+				$(".loading").hide();
+
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				layer.msg('服务器连接异常');
+			}
+		});
+	}
+$(function(e) {
+
+	ajax_order_list('','ALL');
+	$(".loading").hide();
+
+
+	
+
+//
+//	$(".orderNav li").click(function(){
+//		$(".loading").show();
+//		var indexL = $(this).index()+1;
+//		$(this).addClass("curr").siblings().removeClass("curr");
+//		lijson = 'json/order'+indexL+'.json';
+//
+//	});
+
+
+	
+});
+</script>
+
+

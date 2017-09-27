@@ -1,0 +1,189 @@
+
+<style>
+	.iconPlus{ display:inline;}
+	.iconMinus{ display:none;}
+</style>
+	<div class="myCont">
+		<include file="Public:my_card"/>
+
+		<div class="myCDCont">
+			<div class="title">
+				{$card.title}
+			</div>
+			<div class="title">
+				会员详细介绍
+			</div>
+			<div class="text">
+				{$card.jieshao}
+			</div>
+
+		</div>
+
+		<div class="submitText3 ticketBtn">
+			<ul>
+				<li class="flex-display flex-alignC addcurr">
+					<div class="name">
+						可用优惠券：
+					</div>
+					<div class="info flex-flex1">
+						{$coupon_count}张可用
+						<i><img class="iconPlus" src="__PUBLIC__/home/images/icon_plus.png"><img class="iconMinus" src="__PUBLIC__/home/images/icon_minus.png"></i>
+						<!--<img src="__PUBLIC__/home/images/arrow_down_01.png">-->
+					</div>
+				</li>
+			</ul>
+		</div>
+		<notempty name="couponlist">
+		<div class="ticketList">
+			<ul>
+				<volist name="couponlist" id="vo">
+					<li>
+						<input id="ra{$i}" type="radio" name="coupon" value="{$vo.id}" onclick="ajax_cost_vip()"><label for="ra{$i}">{$vo.name}（有效期剩余{$vo.expire_days}天）</label>
+					</li>
+				</volist>
+			</ul>
+		</div>
+		</notempty>
+		<div class="submitText3">
+			<ul>
+				<li class="flex-display flex-alignC">
+					<div class="name">
+						还需支付：
+					</div>
+					<div class="info flex-flex1">
+
+						<span id="cost">{$card.money}</span>元
+					</div>
+				</li>
+			</ul>
+		</div>
+
+		<div class="btnBottomBlank"></div>
+		<div class="btnBottom">
+			<input type="hidden" value="{$card['id']}" name="card_id">
+			<a data-href="{:url('order_pay')}" onclick="target_choice(this,{$card['id']})">
+				下一步
+			</a>
+		</div>
+        
+        
+    </div>
+    
+
+
+    <div class="loading">
+    	<b></b>
+    </div>
+
+
+<script>
+	function target_choice(obj,card_id){
+		if(card_id==9){
+			$.ajax({
+				url : "{:url('check_tiyan')}",
+				type : 'POST',
+				dataType : 'json',
+				data : {},
+				success : function(rdata) {
+					if(rdata.status==1){
+						var url="{:url('Vip/order_pay')}?table=my_cardChoice&id="+card_id;
+						location.href=url;
+					}else {
+						tips(rdata.msg)
+					}
+				},
+			});
+		}else {
+			var url="{:url('Vip/order_pay')}?table=my_cardChoice&id="+card_id;
+			location.href=url;
+		}
+
+//		var url=$(obj).data('href');
+//		$.ajax({
+//			url : url,
+//			type : 'POST',
+//			dataType : 'html',
+//			data : {'ajax' : 1,card_id:card_id,table:'my_cardChoice'},
+//			success : function(rdata) {
+//				history.pushState(null,'',url)
+//				$(".contain").html(rdata);
+//			},
+//		});
+	}
+	//先检测有没体验权限在异步加载详情
+	function ajax_card_tiyan(obj){
+		$.ajax({
+			url : "{:url('check_tiyan')}",
+			type : 'POST',
+			dataType : 'json',
+			data : {},
+			success : function(rdata) {
+				if(rdata.status==1){
+					$(".loading").show();
+					var url=$(obj).find('a').data('href');
+					$.ajax({
+						url : url,
+						type : 'POST',
+						dataType : 'html',
+						data : {'ajax' : 1},
+						success : function(rdata) {
+							$(".loading").hide();
+							history.pushState(null,'',url)
+							$(".contain").html(rdata);
+						},
+					});
+				}else {
+					tips(rdata.msg)
+				}
+			},
+		});
+	}
+	//异步更新活动需要支付的费用 activid 活动id
+	function ajax_cost_vip(){
+		var coupon=$("input[name='coupon']:checked").val();
+		if(coupon==undefined){
+			coupon=0;
+		}
+		var card_id=$("input[name='card_id']").val();
+
+		$.ajax({
+			type: 'POST',
+			url: "{:url('ajax_cost_vip')}" ,
+			data: {coupon_id:coupon,card_id:card_id} ,
+			dataType: "json",
+			success: function(data){
+
+				$("#cost").text(data);
+
+			},
+		});
+	}
+$(function(e) {
+
+	$(".loading").hide();
+	ajax_cost_vip()
+
+//	console.log(1)
+	$(".ticketBtn .addcurr").click(function(){
+		//		$(this).parent().find("dl").slideToggle();
+		if( $(".iconPlus").css("display")=='none' ) {
+			$(".iconMinus").css("display","none");
+			$(".iconPlus").css("display","inline");
+		}else {
+			$(".iconPlus").css("display","none");
+			$(".iconMinus").css("display","inline");
+		}
+//		if($(this).hasClass("curr"))
+//		{
+//			$(this).removeClass("curr");
+//		}
+//		else
+//		{
+//			$(this).addClass("curr");
+//		}
+		$(".ticketList").slideToggle('fast');
+	});
+});
+</script>
+
+

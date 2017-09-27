@@ -1,0 +1,90 @@
+
+    
+    <div class="submitCont">
+		<div class="successCont">
+			<img src="__PUBLIC__/home/images/success.png" style=" width:1.8rem; padding-top:3.15rem;">
+			<h1>付款成功</h1>
+		</div>
+		<if condition="$order">
+			<div class="submitText1">
+				<ul>
+					<li class="flex-display flex-alignC">
+						<div class="name">
+							支付流水号：
+						</div>
+						<div class="info flex-flex1">
+							{$order.order_sn}
+						</div>
+					</li>
+					<li class="flex-display flex-alignC">
+						<div class="name">
+							支付时间：
+						</div>
+						<div class="info flex-flex1">
+							{$order.add_time|date="Y-m-d H:i:s",###}
+						</div>
+					</li>
+					<li class="flex-display flex-alignC">
+						<div class="name">
+							支付项目：
+						</div>
+						<div class="info flex-flex1">
+							{$activ.activname}
+						</div>
+					</li>
+					<li class="flex-display flex-alignC">
+						<div class="name">
+							支付金额：
+						</div>
+						<div class="info flex-flex1">
+							{$order.order_amount}元
+						</div>
+					</li>
+				</ul>
+			</div>
+		</if>
+		<div class="submitText1">
+			<ul>
+				<li class="flex-display flex-alignC">
+					<div class="name">
+						会<b>口口</b>员：
+					</div>
+					<div class="info flex-flex1">
+						{$user.nickname}
+					</div>
+				</li>
+				<li class="flex-display flex-alignC">
+					<div class="name">
+						活动时间：
+					</div>
+					<div class="info flex-flex1">
+						{$activ.starttime|date="Y-m-d H:i",###}-{$activ.endtime|date="H:i",###}
+					</div>
+				</li>
+				<li class="flex-display flex-alignC">
+					<div class="name">
+						活动地点：
+					</div>
+					<div class="info flex-flex1">
+						{$activ['city']}{$activ['area']}{$activ.address}
+					</div>
+				</li>
+			</ul>
+		</div>
+
+		<div class="submitText4" style="border-bottom:none;">
+			<p>{$activ.detail}</p>
+		</div>
+        
+        
+    </div>
+	<div class="btnBottomBlank"></div>
+
+<script>
+$(function(e) {
+	$(".loading").hide();
+
+});
+</script>
+   
+

@@ -1,0 +1,26 @@
+
+<style>
+	.news h1{
+		text-align: center;
+		font-size: 0.8rem;
+		padding: 1.2rem 3rem;
+
+	}
+	.cont{
+		padding: 0 1rem;
+
+		/*text-indent:25px*/
+	}
+</style>
+
+<div class="news">
+	<h1>{$response.title}</h1>
+	<div class="cont">{$response.content}</div>
+
+</div>
+<script>
+
+	$(function(){
+		$(".loading").hide();
+	})
+</script>

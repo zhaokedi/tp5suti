@@ -1,0 +1,193 @@
+@charset "utf-8";
+/* CSS Document */
+
+body{ width:100%; min-width:320px; max-width:640px; margin:0 auto; font-family: Arial,"方正黑体简体",Microsoft YaHei; background-color:#151515; font-size:0.8rem; color:#fff;}
+a,a:hover,a:visited{ color:inherit; text-decoration:none;}
+.clear{ clear:both; float:none !important; width:0 !important; height:0 !important; margin:0 !important; padding:0 !important; border:none !important;}
+.flex-display{ display:-webkit-flex; display:-webkit-box; display:-ms-flexbox; display:-moz-flex; display:flex;}
+.flex-wrap{ -webkit-flex-wrap:wrap; -webkit-box-flex-wrap:wrap; -ms-flex-wrap:wrap; -moz-flex-wrap:wrap; flex-wrap:wrap;}
+.flex-alignC{-webkit-align-items:center; -webkit-box-align:center;  -moz-align-items:center; align-items:center; -ms-flex-align:center;}
+.flex-flex1{ -webkit-flex:1; -webkit-box-flex:1; -ms-flex:1; -moz-flex:1; flex:1;}
+.flex-flex2{ -webkit-flex:2; -webkit-box-flex:2; -ms-flex:2; -moz-flex:2; flex:2;}
+img{ vertical-align:bottom;}
+input,textarea{ font-family: Arial,"方正黑体简体", Microsoft YaHei; color:#fff;}
+*{-webkit-tap-highlight-color:rgba(0,0,0,0);}
+
+/*banner*/
+.banner{}
+.banner img{ width:100%;}
+
+/*index*/
+.indexCont{}
+.indexNav{ background-color:#000; border-top:1px solid #3a3a3a;}
+.indexNav ul{}
+.indexNav li{ height:2.75rem; line-height:2.75rem; text-align:center; font-size:0.7rem; border-left:1px solid #3a3a3a;}
+.indexNav li.curr{ background-color:#f4d420; color:#000;}
+.indexNav li:first-child{ border-left:none;}
+
+.indexList1{}
+.indexList1 ul{}
+.indexList1 li{ margin-bottom:1rem;}
+.indexList1 li a{ display:block; position:relative; height:6.75rem; overflow:hidden;}
+.indexList1 li img{ width:100%;}
+.indexList1 li .liblock{ position:absolute; top:0; left:0; width:100%; height:6.75rem; background-color:rgba(0,0,0,0.5); text-align:center; box-sizing:border-box; padding:2.5rem 1.1rem 0 1.1rem;}
+.indexList1 li .liblock b{ display:inline-block; font-weight:normal; padding:0 0.5rem; height:1.2rem; line-height:1.2rem; text-align:center; font-size:0.7rem; border:1px solid #fff; margin-bottom:0.3rem;}
+.indexList1 li .liblock p{ font-size:0.575rem; line-height:1rem; height:2rem; overflow:hidden;}
+
+/*bottom*/
+.bottomBlank{ height:2.85rem;}
+.bottom{ background-color:#151515; position:fixed; bottom:0; width:100%; min-width:320px; max-width:640px; z-index:10;}
+.bottom ul{}
+.bottom li{ text-align:center; color:#585858; position:relative;}
+.bottom li a{ display:block; height:2.85rem; box-sizing:border-box; padding-top:0.5rem;}
+.bottom li img{ width:1.075rem;}
+.bottom li .nimg{ display:inline;}
+.bottom li .himg{ display:none;}
+.bottom li p{ font-size:0.6rem; margin-top:0.35rem;}
+.bottom li.curr{ background-color:#1a1a1a; color:#f4d420;}
+.bottom li.curr .nimg{ display:none;}
+.bottom li.curr .himg{ display:inline;}
+.bottom li dl{ position:absolute; left:0; bottom:3.2rem; background-color:#151515; width:100%; box-shadow:-2px 2px 5px #000; display:none;}
+.bottom li dl dd{ font-size:0.625rem; border-bottom:1px solid #3a3a3a;}
+.bottom li dl dd:last-child{ border-bottom:none;}
+.bottom li dl dd a{ height:1.65rem; line-height:1.65rem; text-align:center; padding-top:0;}
+.bottom li.curr dl{ background-color:#1a1a1a; color:#585858;}
+.bottom li.big{ color:#f4d420; background-color:#000;}
+.bottom li.big a{ padding-top:0;}
+.bottom li.big p{ margin-top:0; line-height:2.85rem;}
+.bottom li.big2{ color:#000; background-color:#f4d420;}
+.bottom li.big2 a{ padding-top:0;}
+.bottom li.big2 p{ margin-top:0; line-height:2.85rem;}
+
+.loading{ position:fixed; width:100%; min-width:320px; max-width:640px; height:100vh; top:0; z-index:9; background-color:#151515;}
+.loading b{ display:block; position:relative; border-radius: 50%; width: 60px; box-sizing:border-box; height: 60px; font-size: 10px; position: relative; left:50%; top:50%; margin-left:-30px; margin-top:-30px; text-indent: -9999em; border-top: 5px solid hsla(0,0%,100%,.2); border-right: 5px solid #fddc0a; border-bottom: 5px solid #fddc0a; border-left: 5px solid #fddc0a; -webkit-transform: translateZ(0); -ms-transform: translateZ(0); transform: translateZ(0); -webkit-animation: loadanime 1.1s infinite linear; animation: loadanime 1.1s infinite linear;}
+
+.loading2{ padding:0.675rem 0; display:none;}
+.loading2 b{ display:block; position:relative; border-radius: 50%; width: 30px; box-sizing:border-box; height: 30px; font-size: 10px; position: relative; left:50%; top:50%; margin-left:-15px; margin-top:-15px; text-indent: -9999em; border-top: 5px solid hsla(0,0%,100%,.2); border-right: 5px solid #fddc0a; border-bottom: 5px solid #fddc0a; border-left: 5px solid #fddc0a; -webkit-transform: translateZ(0); -ms-transform: translateZ(0); transform: translateZ(0); -webkit-animation: loadanime 1.1s infinite linear; animation: loadanime 1.1s infinite linear;}
+
+@keyframes loadanime
+{
+from { transform:rotate(0deg);}
+to{ transform:rotate(360deg);}	
+}
+@-moz-keyframes loadanime
+{
+from { transform:rotate(0deg);}
+to{ transform:rotate(360deg);}	
+}
+@-webkit-keyframes loadanime
+{
+from { transform:rotate(0deg);}
+to{ transform:rotate(360deg);}	
+}
+@-o-keyframes loadanime
+{
+from { transform:rotate(0deg);}
+to{ transform:rotate(360deg);}	
+}
+
+/*detail*/
+.detailCont{}
+.detailCont .name{ padding:0.9rem 1.1rem; background-color:#111; font-size:0.7rem; overflow:hidden;}
+.detailCont .name .fr{ color:#f4d420;}
+
+.detailCont .DCBlock{ padding:0.9rem 1.1rem;}
+.detailCont .block1{ border-bottom:1px solid #3a3a3a;}
+.detailCont .block1 ul{}
+.detailCont .block1 li{ font-size:0.525rem; color:#585858; overflow:hidden; white-space:nowrap; text-overflow:ellipsis;}
+.detailCont .block1 li img{ width:0.5rem; vertical-align:middle; margin-bottom:2px; margin-right:0.1rem;}
+
+.detailCont .block2{ font-size:0.525rem; color:#585858;}
+.detailCont .block2 .fr{ color:#fff;}
+
+.indexTitle{ background-color:#111; height:1.6rem; line-height:1.6rem; padding:0 1.1rem; font-size:0.7rem;}
+
+.detailCont .block3{}
+.detailCont .block3 p{ font-size:0.525rem; line-height:0.9rem;}
+
+/*my*/
+.myCont{}
+.myCont .cont1{ padding:0.9rem 1.1rem;}
+.myCont .cont1 .img{ width:3.5rem; margin-right:0.75rem;}
+.myCont .cont1 .img img{ width:100%;}
+.myCont .cont1 .text{ overflow:hidden;}
+.myCont .cont1 .text h1{ font-size:0.7rem; margin-bottom:0.5rem;}
+.myCont .cont1 .text p{ font-size:0.525rem; color:#585858; overflow:hidden; white-space:nowrap; text-overflow:ellipsis;}
+.myCont .cont1 .edit{ margin-left:0.75rem; font-size:0.525rem; color:#585858; padding-top:3rem;}
+.myCont .cont1 .edit i{ vertical-align:middle;}
+
+.myTitle{ padding:0.5rem 1.1rem; background-color:#111; font-size:0.7rem; color:#f4d420;}
+
+.myList{}
+.myList ul{}
+.myList li{ font-size:0.7rem; border-bottom:1px solid #3a3a3a;}
+.myList li a{ display:block; padding:0.9rem 1.1rem 0.9rem 1.9rem; overflow:hidden;}
+.myList li i{ float:right; color:#585858;}
+
+/*order*/
+.orderCont{}
+.orderNav{}
+.orderNav ul{}
+.orderNav li{ text-align:center; height:2.75rem; line-height:2.75rem; background-color:#000; font-size:0.7rem;}
+.orderNav li.curr{ background-color:#f4d420; color:#000;}
+
+.orderList{}
+.orderList ul{}
+.orderList li{ padding-top:0.5rem;}
+.orderList li .lititle{ line-height:1.6rem; height:1.6rem; padding:0 1.1rem; background-color:#111; font-size:0.7rem;}
+.orderList li .sp1{ color:#585858;}
+.orderList li .lititle .sp2{ color:#f4d420;}
+.orderList li .cont{ padding:0.9rem 1.1rem; border-bottom:1px solid #3a3a3a;}
+.orderList li .cont .img{ width:3.6rem; margin-right:0.9rem;}
+.orderList li .cont .img img{ width:100%;}
+.orderList li .cont .text{}
+.orderList li .cont .text h1{ font-size:0.7rem; margin-bottom:0.3rem;}
+.orderList li .cont .text p{ font-size:0.525rem; line-height:1.3; color:#585858;}
+.orderList li .btns{ border-bottom:1px solid #3a3a3a; padding:0.7rem 1.1rem; font-size:0.7rem; overflow:hidden;}
+.orderList li .btns a{ display:inline-block; vertical-align:middle; padding:0.3rem 0.3rem; border:1px solid #f4d420; border-radius:3px; margin-left:0.4rem; color:#f4d420;}
+
+/*cart*/
+.cartCont{}
+.cartList{}
+.cartList .listBlock{ padding:0.8rem 1.1rem; border-bottom:1px solid #3a3a3a;}
+.cartList .listBlock:last-child{ border-bottom:none;}
+.cartList .listBlock .check{}
+.cartList .listBlock .check input{ display:none;}
+.cartList .listBlock .check label{ display:block; width:1.15rem; height:1.15rem; background:url(../images/check_icon01.png) center no-repeat; background-size:100% 100%;}
+.cartList .listBlock .check input:checked+label{ background-image:url(../images/check_icon01_h.png);}
+.cartList .listBlock .img{ width:4.85rem;height: 4.85rem; margin-left:1.1rem; margin-right:0.8rem;}
+.cartList .listBlock .img img{ width:100%;}
+.cartList .listBlock .text{ overflow:hidden;}
+.cartList .listBlock .text h1{ font-size:0.7rem; margin-bottom:0.6rem;}
+.cartList .listBlock .text p{ font-size:0.525rem; color:#585858; line-height:0.8rem; height:1.6rem; overflow:hidden; margin-bottom:0.6rem;}
+.cartList .listBlock .text .input{ font-size:0.75rem; color:#f4d420; text-align:right;}
+.cartList .listBlock .text .input .fl{ display:inline-block; vertical-align:bottom; height:0.9rem;}
+.cartList .listBlock .text .input button{ height:0.9rem; border:none; background-color:#000; color:#fff; padding:0; width:1.05rem; font-size:0.575rem; vertical-align:middle;}
+.cartList .listBlock .text .input input{ width:1.5rem; vertical-align:middle; height:0.9rem; padding:0; box-sizing:border-box; border-radius:0; border:1px solid #000; font-size:0.575rem; color:#f4d420; text-align:center; background-color:#151515;}
+.cartList .listBlock .text .input .min{ border-radius:3px 0 0 3px;}
+.cartList .listBlock .text .input .add{ border-radius:0 3px 3px 0;}
+
+.cartBlank{ height:2.85rem;}
+.cartBottom{ background-color:#151515; position:fixed; bottom:0; width:100%;}
+.cartBottom .check{ margin-left:1.1rem; margin-right:0.5rem;}
+.cartBottom .check input{ display:none;}
+.cartBottom .check label{ display:inline-block; width:1.15rem; height:1.15rem; background:url(../images/check_icon01.png) center no-repeat; background-size:100% 100%; vertical-align:middle;}
+.cartBottom .check input:checked+label{ background-image:url(../images/check_icon01_h.png);}
+.cartBottom .text0{ color:#585858; font-size:0.7rem; margin-right:1.85rem;}
+.cartBottom .text{ color:#585858; font-size:0.7rem; white-space:nowrap; overflow:hidden;}
+.cartBottom .text .sp1{ color:#f4d420;}
+.cartBottom a{ height:2.85rem; line-height:2.85rem; width:6.5rem; text-align:center; font-size:0.7rem; background-color:#f4d420; color:#333;}
+
+
+/*plus2*/
+.topFixed{ background-color:rgba(0,0,0,0.7); line-height: 1.5rem; padding: 0 1.1rem; font-size: 0.7rem; color: #fff; position:fixed; width:100%; min-width:320px; max-width:640px; top:0; z-index:9999;}
+.topFixed p{color:#f4d420;}
+
+
+
+
+
+
+
+
+

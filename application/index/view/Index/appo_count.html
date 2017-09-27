@@ -1,0 +1,134 @@
+
+	<div class="MACont">
+		<div class="MABanner">
+
+			<div class="swiper-container ">
+				<div class="swiper-wrapper ">
+
+					<div class="swiper-slide">
+						<a href="#">
+							<img src="__PUBLIC__/home/uploadfile/images/appointment_banner.jpg">
+						</a>
+					</div>
+					<div class="swiper-slide">
+						<a href="#">
+							<img src="__PUBLIC__/home/uploadfile/images/appointment_banner.jpg">
+						</a>
+					</div>
+					<div class="swiper-slide">
+						<a href="#">
+							<img src="__PUBLIC__/home/uploadfile/images/appointment_banner.jpg">
+						</a>
+					</div>
+					<div class="swiper-slide">
+						<a href="#">
+							<img src="__PUBLIC__/home/uploadfile/images/appointment_banner.jpg">
+						</a>
+					</div>
+
+				</div>
+				<div class="swiper-pagination"></div>
+			</div>
+
+		</div>
+
+		<div class=" flex-display flex-alignC">
+
+
+			<div class="MAList1 flex-flex1">
+				<h1>{$shop.count}</h1>
+				<h2>器械/次</h2>
+			</div>
+			<div class="MAList1 flex-flex1">
+				<h1>{$action.count}</h1>
+				<h2>团操/次</h2>
+			</div>
+			<div class="MAList1 flex-flex1">
+				<h1>{$activ.count}</h1>
+				<h2>活动/次</h2>
+			</div>
+
+		</div>
+
+
+		<div class="lists">
+			<if condition="$shop.count neq 0">
+				<div class="title">
+					器械<span class="sp1">{$shop.count}</span>次
+					<b>已获得积分<span class="sp1">{$shop.totalpoint}</span>分
+						<!--<img src="__PUBLIC__/home/images/mcc_icon01.png">-->
+					</b>
+				</div>
+				<ul>
+					<li>累计训练：<b>{$shop.count}次</b></li>
+					<li>累计时长：<b>{$shop.length}分</b></li>
+					<li>累计天数：<b>{$shop.totaldays}天</b></li>
+				</ul>
+			</if>
+			<if condition="$action.count neq 0">
+				<div class="title">
+					团操<span class="sp1">{$action.count}</span>次
+					<b>已获得积分<span class="sp1">{$action.totalpoint}</span>分
+						<!--<img src="__PUBLIC__/home/images/mcc_icon01.png">-->
+					</b>
+				</div>
+				<ul>
+					<li>累计训练：<b>{$action.count}次</b></li>
+					<li>累计时长：<b>{$action.length}分</b></li>
+					<li>累计天数：<b>{$action.totaldays}天</b></li>
+				</ul>
+			</if>
+			<if condition="$activ.count neq 0">
+				<div class="title">
+					活动<span class="sp1">{$activ.count}</span>次
+					<b>已获得积分<span class="sp1">{$activ.totalpoint}</span>分
+						<!--<img src="__PUBLIC__/home/images/mcc_icon01.png">-->
+					</b>
+				</div>
+				<ul>
+					<li>累计训练：<b>{$activ.count}次</b></li>
+					<li>累计时长：<b>{$activ.length}分</b></li>
+					<li>累计天数：<b>{$activ.totaldays}天</b></li>
+				</ul>
+			</if>
+		</div>
+<!--全部为0时显示-->
+		<if condition="$shop.count eq 0 and $action.count eq 0 and $activ.count eq 0">
+		<div class="focusBtn" onclick="ajax_html(this)">
+			<a data-href="{:url('index_shop')}">立即预约，赚取积分</a>
+		</div>
+		</if>
+        
+        
+    </div>
+
+
+<script>
+	//异步加载详情
+	function ajax_html(obj){
+		var url=$(obj).find('a').data('href');
+		$.ajax({
+			url : url,
+			type : 'POST',
+			dataType : 'html',
+			data : {'ajax' : 1},
+			success : function(rdata) {
+				$(".loading").hide();
+				history.pushState(null,'',url)
+				$(".contain").html(rdata);
+			},
+
+		});
+	}
+jQuery(document).ready(function(e) {
+	$(".loading").hide();
+	var mySwiper = new Swiper('.swiper-container', {
+		autoplay: 5000,
+		pagination : '.swiper-pagination',
+		loop:true,
+	})
+
+	
+});
+</script>
+

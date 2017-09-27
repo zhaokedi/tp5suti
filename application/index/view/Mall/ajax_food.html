@@ -1,0 +1,21 @@
+{volist name="goodslist" id="vo"}
+	<li>
+		<a data-href="{:url('detail',array('id'=>$vo['id']))}">
+			<img src="{$vo.original_img|fullimgpath}">
+			<div class="liblock">
+				<b>{$vo.goods_name}</b>
+				<p>{$vo.goods_remark}</p>
+			</div>
+		</a>
+	</li>
+{/volist}
+<script>
+	$(function(){
+		$(".liblock").click(function(){
+			$(".loading").show();
+			var url=$(this).parent().parent().find("a").data('href');
+			ajax_load(url);
+		})
+	})
+
+</script>

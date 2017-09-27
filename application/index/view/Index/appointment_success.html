@@ -1,0 +1,71 @@
+
+    <div class="submitCont">
+		<div class="successCont">
+			<img src="__PUBLIC__/home/images/bottom_icon01_h.png">
+			<h1 style="text-align: center">器械预约成功</h1>
+		</div>
+
+		<div class="submitText1">
+			<ul>
+				<li class="flex-display flex-alignC">
+					<div class="name">
+						门锁密码：
+					</div>
+					<div class="info flex-flex1">
+						{$onelist.doornum}({$onelist.accesshours}-{$onelist.accessendhours}有效)
+					</div>
+				</li>
+				<li class="flex-display flex-alignC">
+					<div class="name">
+						预约门店：
+					</div>
+					<div class="info flex-flex1">
+						{$onelist.shopname}
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div class="submitText1">
+			<ul>
+				<li class="flex-display flex-alignC">
+					<div class="name">
+						健身时间：
+					</div>
+					<div class="info flex-flex1">
+						{$onelist.yuyuemonth}&nbsp;{$onelist.yuyuehours}-{$onelist.yuyueendhours}
+						<!--8月8日 23:30-8月9日00:30-->
+					</div>
+				</li>
+			</ul>
+		</div>
+
+		<div class="indexTitle">
+			本次锻炼部位：<span>{$onelist.position}</span>
+		</div>
+
+		<!--<div class="submitText2">-->
+			<!--&lt;!&ndash;<img src="__PUBLIC__/home/uploadfile/images/success_img01.jpg">&ndash;&gt;-->
+			<!--<p>胸肌健美是健美的重要标志，但过分的使胸部发达就会给人以下坠、臃肿的视觉感受，那样反而不美。健美的胸应该即饱满又坚挺，胸部的上中下侧及中间沟皆应得到发展胸部肌肉主要包括胸大肌、胸小肌，具体肌肉图示和英文名称参考俊宇博文胸肌图示 。胸小肌在胸大肌下面，</p>-->
+		<!--</div>-->
+
+		<div class="submitText2" style="border-bottom:none;">
+			{$onelist.notice}
+		</div>
+
+	</div>
+    
+    <!--loading-->
+    <div class="loading">
+    	<b></b>
+    </div>
+    <!--loading end-->
+
+<script>
+$(function(e) {
+
+$(".loading").hide();
+
+
+	
+});
+</script>

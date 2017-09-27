@@ -1,0 +1,310 @@
+<style>
+	.iconPlus{ display:none;}
+	.iconMinus{ display:inline;}
+</style>
+	<div class="myCCCont">
+		<div class="list">
+			<div class="li">
+				<h1>请选择常去门店</h1>
+			</div>
+			<volist name="citylist" id="vo">
+				<div class="cityBlock">
+					<div class="li">
+						<h1>{$vo.name}</h1>
+						<!--<i><img src="__PUBLIC__/home/images/my_arrow01_d.png"></i>-->
+						<i><img class="iconPlus" src="__PUBLIC__/home/images/icon_plus.png"><img class="iconMinus" src="__PUBLIC__/home/images/icon_minus.png"></i>
+
+					</div>
+					<dl >
+						<volist name="vo.shoplist" id="v">
+							<dd>
+								<input id="ra{$vo.id}{$i}" type="radio" name="s_id" value="{$v.id}" data-id="{$v.id}" onclick="ajax_teacher(this,{$v.id})">
+								<label for="ra{$vo.id}{$i}">
+									<!--{$vo.name}（有效期剩余{$vo.expire_days}天）-->
+									<h1>{$v.title}</h1>
+									<p>{$v.area}{$v.address}</p>
+								</label>
+							</dd>
+							<!--<dd>-->
+								<!--<a href="javascript:;" data-id="{$v.id}" onclick="ajax_teacher(this,{$v.id})" class="removeother">-->
+									<!--<h1>{$v.title}</h1>-->
+									<!--<p>{$v.area}{$v.address}</p>-->
+								<!--</a>-->
+							<!--</dd>-->
+						</volist>
+
+					</dl>
+				</div>
+			</volist>
+
+
+			<div class="li">
+				<h1>请选择接待教练</h1>
+				<!--<i><img class="tipBtn" src="__PUBLIC__/home/images/mcc_icon01.png"></i>-->
+			</div>
+			<style>
+				.cteacher  input[type="radio"]{ display:none;}
+				.cteacher dd label{ display:block;  padding-right:1.5rem; font-size:0.625rem; color:#585858; background:url(__PUBLIC__/home/images/radio.png) right 1.8rem center no-repeat; background-size:0.675rem auto;}
+				.cteacher dd input[type="radio"]:checked+label{ color:#fff; background-image:url(__PUBLIC__/home/images/radio_c.png);}
+
+			</style>
+			<dl>
+				<div id="teacher" class="cteacher">
+					<!--<dd><input id="1" type="radio" name="t_id" value="1" data-id="1" onclick="choose_teacher(this,'.$v['teacher_id'].')"><label for="1"><h1>assadsas</h1></label></dd>-->
+
+				</div>
+
+				<!--<dd>-->
+					<!--<a class="other" href="javascript:;">-->
+						<!--<h1>其他&gt;</h1>-->
+					<!--</a>-->
+				<!--</dd>-->
+				<div class="cteacher">
+					<dd>
+						<input id="00" type="radio" name="t_id" value="0" data-id="0" onclick="choose_teacher(this,0)">
+						<label for="00">
+							<h1>没有推荐人</h1>
+						</label>
+					</dd>
+				</div>
+				<!--<dd>-->
+					<!--<a  class="removeother2" href="javascript:;" onclick="choose_teacher(this,0)" >-->
+						<!--<h1>没有推荐人</h1>-->
+					<!--</a>-->
+				<!--</dd>-->
+			</dl>
+		</div>
+		<input type="hidden" name="pay_money" value="{$Think.session.payinfo.pay_money}">
+		<input type="hidden" name="shop_id" value="">
+		<input type="hidden" name="teacher_id" value="">
+		<div class="btnBottomBlank"></div>
+		<div class="btnBottom">
+			<a data-href="{:url('bind_tel')}" onclick="target_choice(this)">
+				立即开通
+			</a>
+		</div>
+
+		<div class="indexAD">
+			<div class="closeBtn closeBtn2">
+				<img src="__PUBLIC__/home/images/close_AD.png">
+			</div>
+			<div class="ADCont2">
+				<h1>推荐人解释说明</h1>
+				<p>1.推荐双方均可获得积分奖励</p>
+				<!--<p>2.推荐人说明文字</p>-->
+				<!--<p>3.推荐人说明文字推荐人说明文字推荐人说明文字</p>-->
+
+			</div>
+		</div>
+
+
+    </div>
+
+	<script>
+		/*
+		 * 注意：
+		 * 1. 所有的JS接口只能在公众号绑定的域名下调用，公众号开发者需要先登录微信公众平台进入“公众号设置”的“功能设置”里填写“JS接口安全域名”。
+		 * 2. 如果发现在 Android 不能分享自定义内容，请到官网下载最新的包覆盖安装，Android 自定义分享接口需升级至 6.0.2.58 版本及以上。
+		 * 3. 常见问题及完整 JS-SDK 文档地址：http://mp.weixin.qq.com/wiki/7/aaa137b55fb2e0456bf8dd9148dd613f.html
+		 *
+		 * 开发中遇到问题详见文档“附录5-常见错误及解决办法”解决，如仍未能解决可通过以下渠道反馈：
+		 * 邮箱地址：weixin-open@qq.com
+		 * 邮件主题：【微信JS-SDK反馈】具体问题
+		 * 邮件内容说明：用简明的语言描述问题所在，并交代清楚遇到该问题的场景，可附上截屏图片，微信团队会尽快处理你的反馈。
+		 */
+		wx.config({
+			debug: false,
+			appId: '{$signPackage.appId}',
+			timestamp: '{$signPackage.timestamp}',
+			nonceStr: '{$signPackage.nonceStr}',
+			signature: '{$signPackage.signature}',
+			jsApiList: [
+				'checkJsApi',
+				'chooseWXPay'
+			]
+		});
+	</script>
+
+<script>
+	//异步加载推荐人
+	function ajax_teacher(obj,shopid){
+		$(".removeother").removeClass('other');
+		$(obj).addClass('other');
+		$("input[name='shop_id']").val(shopid)
+		var teacher_id= $("input[name='teacher_id']").val()
+		$.ajax({
+			url : "{:url('ajax_teacher')}",
+			type : 'POST',
+			dataType : 'json',
+			data : {'shopid' : shopid},
+			success : function(rdata) {
+				$("#teacher").html(rdata);
+				if(teacher_id!=0)
+					$("input[name='teacher_id']").val('');
+			},
+
+		});
+	}
+	//选择推荐人
+	function choose_teacher(obj,teacher_id){
+		$("input[name='teacher_id']").val(teacher_id)
+
+	}
+	//支付操作
+	function target_choice(obj){
+		var teacher_id= $("input[name='teacher_id']").val()
+		var shop_id= $("input[name='shop_id']").val()
+		var pay_money= $("input[name='pay_money']").val()
+//		console.log(shop_id);
+//		console.log(teacher_id);
+//		return;
+		if(shop_id==''){
+			tips('请选择门店')
+			return
+		}
+		if(teacher_id==''){
+			tips('请选择推荐人')
+			return
+		}
+
+		show_loading();
+		var tel='{$user.tel}';
+
+		if( pay_money > 0 ){
+//			if('{$user.tel}' ){
+				$.ajax({
+					url : "{:url('pay_info')}",
+					type : 'POST',
+					dataType : 'json',
+					data : {
+						'shop_id' : shop_id,'teacher_id' : teacher_id,type:1
+					},
+					success : function(rdata){
+						hide_loading();
+						if(rdata['status'] == 1){
+							wx.chooseWXPay({
+//								"appId":rdata['appid'],
+								timestamp: rdata['timeStamp'],
+								nonceStr: rdata['nonceStr'],
+								package: rdata['package'],
+								signType: 'MD5', // 注意：新版支付接口使用 MD5 加密
+								paySign: rdata['paySign'],
+								success: function (res) {
+									$.ajax({
+										url:"{:url('pay_success')}",
+										type:"POST",
+										dataType : 'json',
+										data:{
+
+										},
+										success: function(rdata){
+											if(rdata['status']==1){
+												hide_loading();
+												var href="{:url(vip_success)}"
+												ajax_load(href);
+											}
+											else if(rdata['status']==2){
+												tips("支付失败！");
+											}
+										},
+										error: function(data){
+											tips("支付成功后跳转，操作失败！");
+										}
+									});
+								},
+								cancel: function () {
+									tips("取消支付");
+								}
+							});
+						}else{
+							tips(rdata['msg']);
+						}
+
+					},
+					error : function(){
+						tips('支付操作失败');
+					}
+				});
+//			}else{
+//				var url="{:url('Vip/order_pay')}?table=bind_tel&shop_id="+shop_id+'&teacher_id='+teacher_id;
+//				location.href=url;
+//				var url=$(obj).data('href');
+//				$.ajax({
+//					url : url,
+//					type : 'POST',
+//					dataType : 'html',
+//					data : {'ajax' : 1,'shop_id' : shop_id,'teacher_id' : teacher_id ,table:'bind_tel'},
+//					success : function(rdata) {
+//						hide_loading();
+//						history.pushState(null,'',url)
+//						$(".contain").html(rdata);
+//					},
+//				});
+//			}
+		}else{
+			$.ajax({
+				url : "{:url(pay_success)}",
+				type : 'POST',
+				dataType: "json",
+				data : {
+				},
+				success : function(rdata){
+					layer.closeAll();
+					if(rdata['status'] == 1){
+						tips(rdata['msg'])
+						setTimeout(function(){
+							var href="{:url(vip_success)}";
+							ajax_load(href);
+						},1000)
+					}else{
+						tips(rdata['msg']);
+					}
+				},
+				error : function(){
+					tips('操作失败');
+				}
+			});
+		}
+
+	}
+$(function(e) {
+	$(".loading").hide();
+
+
+		$(".tipBtn").click(function(){
+			layer.open({
+				title:'',
+				closeBtn:0,
+				type:1,
+				content:$(".indexAD"),
+				skin:'tipLayer',
+				shade:[0.8,'#000']
+			});
+		});
+		
+		$(".closeBtn img").click(function(){
+			layer.closeAll();
+		});
+		
+		$(".cityBlock .li").click(function(){
+			$(this).parent().find("dl").slideToggle('fast');
+			if( $(this).find(".iconPlus").css("display")=='none' ) {
+				$(this).find(".iconMinus").css("display","none");
+				$(this).find(".iconPlus").css("display","inline");
+			}else {
+				$(this).find(".iconPlus").css("display","none");
+				$(this).find(".iconMinus").css("display","inline");
+			}
+//			if($(this).hasClass("curr"))
+//			{
+//				$(this).removeClass("curr");
+//			}
+//			else
+//			{
+//				$(this).addClass("curr");
+//			}
+		});
+
+});
+</script>
+

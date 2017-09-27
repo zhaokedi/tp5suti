@@ -1,0 +1,72 @@
+
+	<div class="myAEDCont">
+
+		<div class="title">
+
+			<h1>健身时间：{$appointment.yuyuetime}-{$appointment.yuyueendhours}</h1>
+
+		</div>
+
+		<div class="eList">
+			<ul>
+				<volist name="teacher" id="vo">
+					<li class="flex-display flex-alignC">
+						<div class="img">
+							<img src="{$vo.teacher_headimg|fullimgpath}">
+						</div>
+						<div class="text">{$vo.teacher_name}</div>
+						<div class="raty flex-flex1" data-score="{$vo.point}"></div>
+					</li>
+				</volist>
+
+			</ul>
+		</div>
+
+		<div class="AEDText">
+			<div class="AEDTtitle">
+				评价内容
+			</div>
+			<div class="AEDTtext">
+				{$evalist[content]}
+			</div>
+		</div>
+		<div class="AEDText">
+			<div class="AEDTtitle">
+				留言回复
+			</div>
+			<div class="AEDTtext">
+				{$evalist[response]}
+			</div>
+		</div>
+        
+        
+    </div>
+    
+
+
+
+
+<script>
+jQuery(document).ready(function(e) {
+
+		$(".loading").hide();
+		
+		$(".raty").raty({
+			starOff: '__PUBLIC__/home/images/ED_img07.png',
+			starOn : '__PUBLIC__/home/images/ED_img07_h.png',
+			readOnly:true,
+			number:function(){
+				return $(this).attr("data-score");
+			},
+			score:function(){
+				return $(this).attr("data-score");
+			}
+		});
+
+
+	
+});
+</script>
+
+</body>
+</html>

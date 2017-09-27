@@ -1,0 +1,43 @@
+
+    
+    <div class="submitCont">
+
+		<div class="successCont">
+			<img src="__PUBLIC__/home/images/success.png" style=" width:1.8rem; padding-top:3.15rem;">
+			<h1>评价成功</h1>
+		</div>
+
+		<div class="submitText1">
+			<ul>
+				<li class="flex-display flex-alignC">
+					<div class="name">
+						本次评价获得积分：
+					</div>
+					<div class="info flex-flex1">
+						{$getpoint}分
+					</div>
+				</li>
+				<li class="flex-display flex-alignC">
+					<div class="name">
+						您当前积分：
+					</div>
+					<div class="info flex-flex1">
+						{$user.point}分
+					</div>
+				</li>
+			</ul>
+		</div>
+        
+    </div>
+    
+
+
+
+<script>
+$(function(e) {
+
+	$(".loading").hide();
+
+});
+</script>
+

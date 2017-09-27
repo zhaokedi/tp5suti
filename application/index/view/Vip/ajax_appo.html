@@ -1,0 +1,49 @@
+
+<div class="swiper-wrapper">
+	<volist name="totallist" id="vv">
+		<div class="swiper-slide">
+			<volist name="vv.shoplist" id="vo">
+				<div class="MADBlock">
+					<div class="name">
+						{$vo.shopname}<span class="sp1">{$vo.count}</span>次<a href="{$vo.mapurl}">查看地图&gt;</a>
+					</div>
+					<volist name="vo.appolist" id="vo1">
+						<div class="classes">
+							<if condition="$vo1.status eq 1 ">待进行<elseif condition="$vo1.status eq 2"/>已取消<else/> 已完成 </if>
+						</div>
+
+						<div class="li flex-display flex-alignC">
+							<div class="img">
+								<a data-href="{$vo1.appo_detail_url}" onclick="ajax_load('{$vo1.appo_detail_url}')"><img src="__PUBLIC__/home/uploadfile/images/myAD_img01.jpg"></a>
+							</div>
+							<div class="text flex-flex1">
+									<h1><a data-href="{$vo1.appo_detail_url}" onclick="ajax_load('{$vo1.appo_detail_url}')">{$vo1.name}</a></h1>
+									<p>预约时间：{$vo1.yuyuetime|date="Y-m-d H:i",###}</p>
+							</div>
+							<if condition="$vo1['status'] eq 1 and $vo1['is_pingjia'] eq 0">
+								<div class="btn">
+									<a href="javascript:;" data-href="" onclick="cancel_appointment(this,{$vo1['id']})">取消预约</a>
+								</div>
+							<elseif condition="$vo1['status'] eq 3 and $vo1['is_pingjia'] eq 0"/>
+
+								<div class="btn">
+									<a data-href="{$vo1.appo_eva_url}" onclick="ajax_load('{$vo1.appo_eva_url}')">立即评价</a>
+									<p>可获得积分：{$vo1.pjpoint}分</p>
+								</div>
+							<elseif condition="$vo1['status'] eq 3 and $vo1['is_pingjia'] eq 1"/>
+								<div class="btn">
+									<a data-href="{$vo1.appo_evad_url}" onclick="ajax_load('{$vo1.appo_evad_url}')">查看评价</a>
+								</div>
+							<elseif/>
+								<div class="btn">
+								&nbsp;
+							</div>
+							</if>
+						</div>
+					</volist>
+
+				</div>
+			</volist>
+		</div>
+	</volist>
+</div>

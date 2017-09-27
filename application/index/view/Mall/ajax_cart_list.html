@@ -1,0 +1,116 @@
+
+<div class="cartList">
+<volist name="cartList" id="v">
+	<div class="listBlock flex-display flex-alignC">
+		<div class="check">
+			<input id="cb{$i}" type="checkbox" class="cart_c" onclick="ajax_cart_list();" name="cart_select[{$v.id}]" value="1" <if condition="$v[selected] eq 1" >checked="checked"</if>><label for="cb{$i}"></label>
+		</div>
+		<div class="img">
+			<a href="{:url('detail',array('id'=>$v[goods_id]))}"><img src="{$v.goods_id|goods_thum_images=200,200}"></a>
+		</div>
+		<div class="text flex-flex1">
+			<h1>{$v.goods_name}</h1>
+			{$v.goods_desc}
+			<div class="input">
+				<span class="fl">￥<span class="price">{$v.goods_price}</span></span>
+				<button class="min" type="button" onclick="switch_num(-1,{$v['id']},'');">
+					<i class="fa fa-minus" aria-hidden="true"></i>
+				</button>
+				<input class="text_box" type="text" value="{$v.goods_num}" name="goods_num[{$v.id}]" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')">
+				<button class="add" type="button" onclick="switch_num(+1,{$v['id']},'');">
+					<i class="fa fa-plus" aria-hidden="true"></i></button>
+			</div>
+		</div>
+	</div>
+</volist>
+</div>
+
+<div class="cartBlank"></div>
+<div class="cartBottom flex-display flex-alignC" style="z-index: 10000">
+	<div class="check">
+		<input id="cb0" type="checkbox" ><label for="cb0" onclick="chkAll_onclick()"></label>
+	</div>
+	<div class="text0" id="checkbox" >
+		全选
+	</div>
+	<div class="text flex-flex1">
+		合计：<span class="sp1">￥<span class="priceAll">{$total_price.total_fee}</span></span>
+	</div>
+	<a href="javascript:;" onclick="return selcart_submit();">
+		去支付
+	</a>
+</div>
+
+<script>
+
+	var is_checked = true;//全部选中标识
+	//遍历购物车内所有商品是否全部选中
+	$('.cart_c').each(function(){
+		if(!$(this).prop("checked")) {
+			is_checked = false;
+			return false;
+		}
+	});
+	if(is_checked){
+		$('#cb0').prop("checked",true);//
+	}else {
+		$('#cb0').prop("checked",false);
+	}
+
+	function chkAll_onclick() {
+
+		if($('#cb0').prop("checked")){
+			$('#cb0').prop("checked",false);
+			$("input[name^='cart_select']").prop('checked',false);
+			is_checked = false;
+		} else{
+			$('#cb0').prop("checked",true);
+			$("input[name^='cart_select']").prop('checked',true);
+			is_checked = true;
+		}
+		ajax_cart_list();
+	}
+
+
+	function del_cart_goods(goods_id) {
+		if(!confirm('确定要删除吗?'))
+			return false;
+		var chk_value = [];
+		chk_value.push(goods_id);
+		// ajax调用删除
+		if(chk_value.length > 0)
+			ajax_del_cart(chk_value.join(','));
+	}
+
+
+	function selcart_submit() {
+		var j=0;
+		$('input[name^="cart_select"]:checked').each(function(){
+			j++;
+		});
+		if (j>0) {
+			window.location.href="{:url('cart2')}"
+		} else {
+			tips('请选择要结算的商品！');
+			return false;
+		}
+	}
+	/**
+	 * 购买商品数量加加减减
+	 * 购买数量 , 购物车id , 库存数量
+	 */
+	function switch_num(num,cart_id,store_count)
+	{
+		var num2 = parseInt($("input[name='goods_num["+cart_id+"]']").val());
+		num2 += num;
+		if(num2 < 1) num2 = 1; // 保证购买数量不能少于 1
+//		if(num2 > store_count)
+//		{   alert("库存只有 "+store_count+" 件, 你只能买 "+store_count+" 件");
+//			num2 = store_count; // 保证购买数量不能多余库存数量
+//		}
+
+		$("input[name='goods_num["+cart_id+"]']").val(num2);
+
+		ajax_cart_list(); // ajax 更新商品价格 和数量
+	}
+</script>

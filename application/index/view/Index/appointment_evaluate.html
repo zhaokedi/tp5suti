@@ -1,0 +1,171 @@
+
+	<div class="myAECont">
+		<div class="title">
+			<h1>健身时间：{$appointment.yuyuetime} {$appointment.yuyueendhours}</h1>
+			<h2>（点击为您服务过的教练头像进行评价）</h2>
+		</div>
+		<div class="choices">
+			<div class="swiper-container ">
+				<div class="swiper-wrapper ">
+					<volist name="teacher_list" id="vo">
+						<div class="swiper-slide">
+							<a href="javascript:;" data-name="{$vo.name}" data-id="{$vo.teacher_id}">
+								<img src="__PUBLIC__{$vo.picture}">
+							</a>
+						</div>
+					</volist>
+				</div>
+
+			</div>
+			<div class="swiper-button-prev"></div>
+			<div class="swiper-button-next"></div>
+		</div>
+
+		<div class="eList">
+			<form>
+				<ul>
+
+
+				</ul>
+
+				<input type="hidden" name="apid" value="{$apid}">
+			</form>
+		</div>
+
+		<div class="inputBlock">
+			<textarea placeholder="留言评论,您的留言其他用户可见" name="content"></textarea>
+		</div>
+
+		<div class="btnBottomBlank"></div>
+		<div class="btnBottom">
+			<a data-href="" onclick="save_shop_evaluate()">
+				提交评价
+			</a>
+		</div>
+        
+        
+    </div>
+    
+
+
+<script>
+	var before_send=1;
+	function save_shop_evaluate(){
+		var flag=0;
+
+		var apid = $("input[name='apid']").val();
+		var teacher_arr = new Array();
+		var type = 1;
+		var content = $("textarea[name='content']").val();
+		$(".eList ul li").each(function(i){
+			var temp_arr = {};
+			temp_arr['point'] = $(this).find("input[name='point']").val();
+			if(temp_arr['point']==''){
+				flag=1;
+			}
+			temp_arr['tname'] = $(this).find(".thename").text();
+			temp_arr['tid'] = $(this).find("input[name='tids']").val();
+			teacher_arr.push(temp_arr);
+		});
+		if(flag==1){
+			tips('请给选中的教练打分');
+			return;
+		}
+		if (content==''){
+			tips('评论能容不能为空');
+			return;
+		}
+		if(before_send==0){
+			return;
+		}
+		before_send=0;
+		$.ajax({
+			url : "{:url('save_evaluation')}",
+			type : "POST",
+			data : {
+				"apid" : apid,
+				"content" : content,
+				"sorts_arr" : teacher_arr,
+				"type" : type
+			},
+			success : function(rdata){
+//				console.log(before_send);
+				before_send=1;
+				if(rdata['status'] == 1){
+					tips(rdata['msg'],1000);
+					setTimeout(function(){
+						var url="{:url('appo_evaluate_success')}?type="+type;
+						$.ajax({
+							url : url,
+							type : 'POST',
+							dataType : 'html',
+							data : {'ajax' : 1,	"type" : type},
+							success : function(rdata) {
+								$(".loading").hide();
+								history.pushState(null,'',url)
+								$(".contain").html(rdata);
+							},
+						});
+					},1000)
+					return;
+				}else if(rdata['status'] == 2){
+					tips(rdata['msg']);
+				}
+			},
+			error : function(){
+				tips('操作失败');
+			}
+		});
+	}
+$(function(e) {
+		$(".loading").hide();
+		var mySwiper = new Swiper('.swiper-container', {
+			slidesPerView:4,
+		});
+
+		$(".swiper-slide a").click(function(){
+			var thename = $(this).attr("data-name");
+			var imgsrc = $(this).find("img").attr("src");
+			var id = $(this).attr("data-id");
+			if($(this).hasClass("checked"))
+			{
+				$(this).removeClass("checked");
+				$(".eList ul li").each(function(index, element) {
+                    if($(this).find(".text").html() == thename)
+					{
+						$(this).remove();
+					}
+                });
+			}
+			else
+			{
+				var html = '<li class="flex-display flex-alignC">\
+								<div class="img">\
+									<img src="'+imgsrc+'"></div>\
+									<div class="text thename">'+thename+'</div>\
+									<input name="tids" type="hidden" value="'+id+'">\
+									<input name="point" type="hidden">\
+								<div class="raty flex-flex1"></div>\
+							</li>';
+				
+				$(".eList ul").append(html);
+				
+				$(".raty").raty({
+					starOff: '__PUBLIC__/home/images/ED_img07.png',
+					starOn : '__PUBLIC__/home/images/ED_img07_h.png',
+					click: function(score, evt) {
+						$(this).prev().val(score);
+					}
+				});
+				$(this).addClass("checked");
+			}
+			
+		});
+		
+
+	
+
+	
+});
+</script>
+

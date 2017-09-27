@@ -1,0 +1,70 @@
+
+	<div class="myAEDCont">
+
+		<div class="title">
+
+			<h1>团操标题：{$eva_info.action_name}</h1>
+			<h1>健身时间：{$appointment.yuyuetime}-{$appointment.yuyueendhours}</h1>
+
+		</div>
+
+		<div class="eList">
+			<ul>
+
+				<li class="flex-display flex-alignC" >
+					<div class="text">我的评分</div>
+					<div class="raty flex-flex1" data-score="{$eva_info.point}"></div>
+				</li>
+
+
+			</ul>
+		</div>
+
+		<div class="AEDText">
+			<div class="AEDTtitle">
+				评价内容
+			</div>
+			<div class="AEDTtext">
+				{$eva_info[content]}
+			</div>
+		</div>
+		<div class="AEDText">
+			<div class="AEDTtitle">
+				留言回复
+			</div>
+			<div class="AEDTtext">
+				{$eva_info[response]}
+			</div>
+		</div>
+        
+        
+    </div>
+    
+
+
+
+
+<script>
+jQuery(document).ready(function(e) {
+
+		$(".loading").hide();
+		
+		$(".raty").raty({
+			starOff: '__PUBLIC__/home/images/ED_img07.png',
+			starOn : '__PUBLIC__/home/images/ED_img07_h.png',
+			readOnly:true,
+			number:function(){
+				return $(this).attr("data-score");
+			},
+			score:function(){
+				return $(this).attr("data-score");
+			}
+		});
+
+
+	
+});
+</script>
+
+</body>
+</html>

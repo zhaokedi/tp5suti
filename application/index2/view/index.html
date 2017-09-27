@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+
+<form name="emrmyform"method="post" action="emrconnect.php">
+    <div class="emrDiv">
+        <!--根据日期查询门诊病历-->
+        <div class="dateSelectLink">
+            <h2>请选择日期查询：</h2>
+            <select name="choosetime">
+                <option value="2017-3-10">2017-3-10</option>
+                <option value="2017510">2017-5-10</option>
+                <option value="2016-12-8">2016-12-8</option>
+                <option value="2016-4-1">2016-4-1</option>
+                <option value="2016-3-12">2016-3-12</option>
+                <option value="2015-9-18">2015-9-18</option>
+            </select>
+            <input type="submit" name="submit"value="提交" >
+        </div>
+
+
+
+
+        <div class="emrForm">
+            <h2>上理附属儿科医院门（急）诊病历</h2>
+            <div class="emrArr">病历属性：<input type="text"name="emrArr"></div>
+            <div class="name">姓&nbsp;&nbsp; 名&nbsp;&nbsp;：<input type="text"name="name" value="<?=$name ?>"></div>
+            <div class="sex">性&nbsp;&nbsp;别&nbsp;&nbsp;：<input type="text"name="sex" value="<?php echo $sex ?>"></div>
+            <div class="age">年&nbsp;&nbsp;龄&nbsp;&nbsp;：<input type="text"name="age" value="<?php echo $age ?>"></div>
+            <div class="disState">病&nbsp;&nbsp;情&nbsp;&nbsp;：<input type="text"name="disState" value="<?php echo $disState ?>"></div>
+            <div class="docterTime">就诊时间：<input type="text"name="docterTime"value="<?php echo $doctorTime ?>"></div>
+            <div class="room">科别：<input type="text"name="room"value="<?php echo $room ?>"></div>
+            <div class="patientForm">病人来源：<input type="text"name="patientForm" value="<?php echo $patientForm ?>"></div>
+            <div class="patientWhere">病人去向：<input type="text"name="patientWhere" value="<?php echo $patientWhere?>"></div>
+            <div class="complaint">主&nbsp;&nbsp;诉&nbsp;&nbsp;：<input type="text"name="complaint"style="width: 80%;"  value="<?php echo $complaint ?>"></div>
+            <div class="preHistory">现病史&nbsp;&nbsp;：<input type="text"name="preHistory"style="width: 80%;" value="<?php echo $preHistory ?>"></div>
+            <div class="pastHistory">既往史&nbsp;&nbsp;：<input type="text"name="pastHistory"style="width: 80%;"  value="<?php echo $pastHistory ?>"></div>
+            <div class="drugAllery">药物过敏史：<input type="text"name="drugAllery"style="width: 80%;" value="<?php echo $drugAllery ?>"></div>
+            <div class="healthCheck">体格检查：<input type="text"name="healthCheck"style="width: 80%;" value="<?php echo $healthCheck ?>"></div>
+            <div class="assisCheck">辅助检查：<input type="text"name="assisCheck"style="width: 80%;" value="<?php echo $assisCheck ?>"></div>
+            <div class="diagnose">诊&nbsp;&nbsp;断&nbsp;&nbsp;：<input type="text"name="diagnose"style="width: 80%;" value="<?php echo $diagnose ?>"></div>
+            <div class="dispose">处&nbsp;&nbsp;理&nbsp;&nbsp;：<input type="text"name="dispose"style="width: 80%;" value="<?php echo $dispose ?>"></div>
+            <div class="docSign">医&nbsp;&nbsp;生&nbsp;&nbsp;：<input type="text" name="docSign" value="<?php echo $docSign ?>"></div>
+
+        </div>
+
+    </div>
+
+</form>
+</body>
+</html>

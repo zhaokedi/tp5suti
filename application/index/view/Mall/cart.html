@@ -1,0 +1,47 @@
+
+	<div class="cartCont">
+		<form id="cart_form" name="formCart" action="{:url('ajaxCartList')}" method="post">
+
+
+		</form>
+    </div>
+
+
+
+<script>
+	var before_request = 1;
+
+	function ajax_cart_list(){
+
+		if(before_request == 0) // 上一次请求没回来 不进行下一次请求
+			return false;
+		before_request = 0;
+
+		$.ajax({
+			type : "POST",
+			url:"{:url('ajaxCartList')}",//+tab,
+			data : $('#cart_form').serialize(),// 你的formid
+			success: function(data){
+				$("#cart_form").html(data);
+//				$("#cart_form").append(data);
+				before_request = 1;
+			}
+		});
+	}
+$(function(e) {
+
+	ajax_cart_list();
+	$(".loading").hide();
+
+//	var s = document.createElement('script');
+//	s.type = 'text/javascript';
+//	s.src = "__PUBLIC__/home/js/cart.js";
+//	var tmp = document.getElementsByTagName('script')[0];
+//	tmp.parentNode.insertBefore(s, tmp);
+
+	
+});
+
+</script>
+
+

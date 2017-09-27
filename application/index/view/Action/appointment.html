@@ -1,0 +1,130 @@
+
+    
+    <div class="submitCont">
+
+		<div class="indexTitle">
+			{$action_info.actionname}预约信息
+		</div>
+
+		<div class="submitText1">
+			<ul>
+				<li class="flex-display flex-alignC">
+					<div class="name">
+						时<b>口口</b>间：
+					</div>
+					<div class="info flex-flex1">
+						{$action_info.teachdate}&nbsp;{$action_info.starttime}-{$action_info.endtime}
+					</div>
+				</li>
+				<li class="flex-display flex-alignC">
+					<div class="name">
+						门<b>口口</b>店：
+					</div>
+					<div class="info flex-flex1">
+						{$action_info.shopname}
+					</div>
+				</li>
+				<li class="flex-display flex-alignC">
+					<div class="name">
+						地<b>口口</b>址：
+					</div>
+					<div class="info flex-flex1">
+						{$action_info.address}
+					</div>
+				</li>
+				<li class="flex-display flex-alignC">
+					<div class="name">
+						课程名称：
+					</div>
+					<div class="info flex-flex1">
+						{$action_info.actionname}
+					</div>
+				</li>
+				<li class="flex-display flex-alignC">
+					<div class="name">
+						课程时长：
+					</div>
+					<div class="info flex-flex1">
+						{$action_info.longtime}分钟
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div class="submitText2" style="border-bottom:none;">
+			{$action_info.notice}
+		</div>
+
+		<div class="btnBottomBlank"></div>
+		<input type="hidden" id="hid_action_id" value="{$action_info.id}" />
+		<div class="btnBottom">
+			<a href="javascript:void(0);" onclick="sub_action(this);">
+				提交预约
+			</a>
+		</div>
+    </div>
+
+
+<script>
+	//团操的预约提交事件
+	function sub_action(){
+
+		var url="{:url('save_action_appointment')}";
+		layer.msg("是否确认提交预约?",{
+			time : 0,
+			btn : ["确认","取消"],
+			yes : function(index){
+				layer.close(index);
+				show_loading();
+				var actionid = $("#hid_action_id").val();
+				$.ajax({
+					url : url,
+					type : "POST",
+					data : {
+						"actionid" : actionid,
+						"type" : 2
+					},
+					success : function(rdata){
+						hide_loading();
+						if(rdata['status'] == 1){
+							var href="{:url('appointment_success')}?id="+rdata['action_ap_id'];
+							tips(rdata['msg']);
+							setTimeout(function(){
+								$.ajax({
+									url : href,
+									type : 'POST',
+									dataType : 'html',
+									data : {'ajax' : 1},
+									success : function(rdata) {
+										layer.closeAll();
+										$(".loading").hide();
+										history.pushState(null,'',href)
+										$(".contain").html(rdata);
+									},
+								});
+							},1000);
+						}else if(rdata['status'] == 2){
+							tips(rdata['msg']);
+						}
+					},
+					error : function(rdata){
+						tips("操作失败");
+					}
+				});
+			}
+		});
+	}
+
+	jQuery(document).ready(function(e) {
+
+
+		$(".loading").hide();
+		
+		
+
+	
+
+	
+});
+</script>
+ 
+

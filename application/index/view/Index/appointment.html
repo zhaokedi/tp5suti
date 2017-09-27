@@ -1,0 +1,182 @@
+
+    
+    <div class="submitCont">
+		<div class="indexTitle">
+			器械预约信息
+		</div>
+
+		<div class="submitText1">
+			<ul>
+				<li class="flex-display flex-alignC">
+					<div class="name">
+						时<b>口口</b>间：
+					</div>
+					<div class="info flex-flex1">
+				{$starttime}-{$endtime}
+					</div>
+				</li>
+				<li class="flex-display flex-alignC">
+					<div class="name">
+						门<b>口口</b>店：
+					</div>
+					<div class="info flex-flex1">
+						{$shop_info.title}
+					</div>
+				</li>
+				<li class="flex-display flex-alignC">
+					<div class="name">
+						地<b>口口</b>址：
+					</div>
+					<div class="info flex-flex1">
+						{$shop_info.addr}
+					</div>
+				</li>
+				<li class="flex-display flex-alignC">
+					<div class="name">
+						健身时长：
+					</div>
+					<div class="info flex-flex1">
+						60分钟
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div class="submitChoice">
+			<div class="icons">
+				<a class="<if condition='$position eq 1'>curr</if>" href="javascript:;">
+					<img class="nimg" src="__PUBLIC__/home/images/submit_icon01.png">
+					<img class="himg" src="__PUBLIC__/home/images/submit_icon01_h.png">
+				</a>
+				<a href="javascript:;" class="<if condition='$position eq 2'>curr</if>">
+					<img class="nimg" src="__PUBLIC__/home/images/submit_icon02.png">
+					<img class="himg" src="__PUBLIC__/home/images/submit_icon02_h.png">
+				</a>
+				<a href="javascript:;" class="<if condition='$position eq 3'>curr</if>">
+					<img class="nimg" src="__PUBLIC__/home/images/submit_icon03.png">
+					<img class="himg" src="__PUBLIC__/home/images/submit_icon03_h.png">
+				</a>
+			</div>
+			<div>
+
+				<div class="text" style="display:<if condition='$position eq 1'>block<else/>none</if>;">
+					<h1><if condition="$position eq 1">系统智能推荐锻炼部位：胸部<else/>我更倾向锻炼部位：胸部</if></h1>
+					<if condition="($limit.0 eq 1) and ($position neq 1)"><p>当前时段预约锻炼胸的小伙伴偏多，为了保障你的体验，建议更换时间或者锻炼部位哦！</p></if>
+				</div>
+				<div class="text" style="display:<if condition='$position eq 2'>block<else/>none</if>;">
+					<h1><if condition="$position eq 2">系统智能推荐锻炼部位：背部<else/>我更倾向锻炼部位：背部</if></h1>
+				<if condition="($limit.1 eq 1) and ($position neq 2)"><p>当前时段预约锻炼胸的小伙伴偏多，为了保障你的体验，建议更换时间或者锻炼部位哦！</p></if>
+				</div>
+				<div class="text" style="display:<if condition='$position eq 3'>block<else/>none</if>;">
+					<h1><if condition="$position eq 3">系统智能推荐锻炼部位：腿部<else/>我更倾向锻炼部位：腿部</if></h1>
+					<if condition="($limit.2 eq 1) and ($position neq 3) "><p>当前时段预约锻炼胸的小伙伴偏多，为了保障你的体验，建议更换时间或者锻炼部位哦！</p></if>
+				</div>
+			</div>
+		</div>
+		<!--<div class="submitText2" style="border-bottom:none;">-->
+			<!--<p>温馨提示：为了方便他人，请于预约时间提前至少120分钟取消。</p>-->
+		<!--</div>-->
+
+		<div class="btnBottomBlank"></div>
+		<div class="btnBottom">
+			<input type="hidden" id="hid_starttime" value="{$starttime}" />
+			<input type="hidden" id="hid_shopid" value="{$shopid}" />
+			<input type="hidden" id="position" value="{$position}" />
+			<a href="javascript:void(0);" onclick="sub_shop();">
+				提交预约
+			</a>
+		</div>
+    </div>
+    
+    <!--loading-->
+    <div class="loading">
+    	<b></b>
+    </div>
+    <!--loading end-->
+
+
+
+<script>
+
+	//器械健身的预约
+	function sub_shop(){
+		layer.msg('确认提交预约？', {
+			time: 0 //不自动关闭
+			,btn: ['提交', '取消']
+			,yes: function(index){
+
+				layer.close(index);
+				show_loading();
+				var shopid = $("#hid_shopid").val();
+				var yuyuetime_start = $("#hid_starttime").val();
+				var position = $("#position").val();
+				var type = 1;//器械
+				$.ajax({
+
+					url : "	{:url('save_shop_appointment')}",
+					type : "POST",
+					data : {
+						'shopid' : shopid,
+						'yuyuetime' : yuyuetime_start,
+						'type' : type,
+						'position' : position
+					},
+					success : function(rdata){
+						hide_loading();
+						if(rdata['status'] == 1){
+							tips(rdata['msg'])
+							setTimeout(function(){
+								var url="{:url('appointment_success')}?ap_id="+rdata['ap_id'];
+								$.ajax({
+									url : url,
+									type : 'POST',
+									dataType : 'html',
+									data : {'ajax' : 1},
+									success : function(rdata) {
+										$(".loading").hide();
+										history.pushState(null,'',url)
+										$(".contain").html(rdata);
+									},
+								});
+							},1500)
+
+						}else if(rdata['status'] == 2){
+							tips(rdata['msg']);
+						}
+					},
+					error : function(rdata){
+						hide_loading();
+						tips('操作失败');
+					}
+				});
+			}
+		});
+	}
+
+
+
+$(function(e) {
+	$(".loading").hide();
+
+	$(".favourBtn").click(function(){
+		if($(this).hasClass("curr"))
+		{
+			$(this).removeClass("curr");
+		}
+		else
+		{
+			$(this).addClass("curr");
+		}
+	});
+	$(".submitChoice .icons a").click(function(){
+		var indexA = $(this).index();
+		var position=indexA+1;
+
+		$(this).addClass("curr").siblings().removeClass("curr");
+		$(".submitChoice .text").eq(indexA).slideDown().siblings().hide();
+		$("#position").val(position);
+
+	});
+
+
+});
+</script>

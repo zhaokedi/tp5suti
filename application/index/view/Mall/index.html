@@ -1,0 +1,129 @@
+<div class="indexCont">
+	<div class="banner">
+		<div class="swiper-container">
+			<div class="swiper-wrapper">
+				<div class="swiper-slide"><a href="#"><img src="__PUBLIC__/home/uploadfile/images/banner01.jpg"></a></div>
+				<div class="swiper-slide"><a href="#"><img src="__PUBLIC__/home/uploadfile/images/banner01.jpg"></a></div>
+				<div class="swiper-slide"><a href="#"><img src="__PUBLIC__/home/uploadfile/images/banner01.jpg"></a></div>
+				<div class="swiper-slide"><a href="#"><img src="__PUBLIC__/home/uploadfile/images/banner01.jpg"></a></div>
+			</div>
+			<div class="swiper-pagination"></div>
+		</div>
+	</div>
+	<div class="indexNav">
+		<ul class="flex-display flex-alignC">
+			<volist name="category" id="vo">
+				<li class="flex-flex1 <if condition='$i eq 1'>curr</if>" data-id="{$vo.id}">{$vo.name}</li>
+			</volist>
+			<!--<li class="flex-flex1 ">品类A</li>-->
+			<!--<li class="flex-flex1">品类A</li>-->
+			<!--<li class="flex-flex1">品类A</li>-->
+		</ul>
+	</div>
+
+	<div class="indexList1">
+		<ul id="foodlist">
+			<!--<li>-->
+				<!--<a href="detail.html">-->
+					<!--<img src="__PUBLIC__/home/uploadfile/images/banner01.jpg">-->
+					<!--<div class="liblock">-->
+						<!--<b>食物A</b>-->
+						<!--<p>食物简介文字食物简介文字食物简介文字食物简介文字</p>-->
+					<!--</div>-->
+				<!--</a>-->
+			<!--</li>-->
+
+
+		</ul>
+	</div>
+</div>
+
+
+
+    <div class="bottomBlank"></div>
+    <div class="bottom" style="z-index: 10000">
+    	<ul class="flex-display flex-alignC">
+        	<li class=" flex-flex2 curr">
+            	<a data-href="{:U('Mall/index')}" onclick="ajax_detail(this)">
+                	<img class="nimg" src="__PUBLIC__/home/images/mall_icon01.png">
+                    <img class="himg" src="__PUBLIC__/home/images/mall_icon01_h.png">
+                    <p>健康加油站</p>
+                </a>
+            </li>
+            <li class="flex-flex1">
+            	<a data-href="{:U('Mall/cart')}" onclick="ajax_detail(this)">
+                	<img class="nimg" src="__PUBLIC__/home/images/mall_icon02.png">
+                    <img class="himg" src="__PUBLIC__/home/images/mall_icon02_h.png">
+                    <p>购物车</p>
+                </a>
+            </li>
+            <li class="flex-flex1">
+            	<a data-href="{:U('Mall/my')}"  onclick="ajax_detail(this)">
+                	<img class="nimg" src="__PUBLIC__/home/images/mall_icon03.png">
+                    <img class="himg" src="__PUBLIC__/home/images/mall_icon03_h.png">
+                    <p>我的</p>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+
+
+
+<script>
+	//异步加载数据
+	function ajax_food(cat_id){
+
+		$(".loading").show();
+		$.ajax({
+			type: 'POST',
+			url: "{:U('ajax_food')}" ,
+			data: {ajax:1,cat_id:cat_id} ,
+			dataType:"html" ,
+			success: function(data){
+//				console.log(data);
+				$("#foodlist").html(data);
+				$(".loading").hide();
+
+//				if(data.length ==1 ){
+//					DStatus = 0;
+//				}else{
+//					if (pagenum==1){
+//						$("#content").html(data);
+//					}else {
+//						$("#content").append(data);
+//					}
+//					page++
+//				}
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				layer.msg('服务器连接异常');
+			}
+		});
+	}
+	$(".indexNav li").click(function(){
+		$(".loading").show();
+		var cat_id = $(this).data('id');
+		$(this).addClass("curr").siblings().removeClass("curr");
+		ajax_food(cat_id);
+
+	});
+
+$(function(e) {
+
+	$(".loading").hide();
+
+	var cat_id=$(".indexNav li").eq(0).data('id');
+	ajax_food(cat_id);
+//	console.log(cat_id);
+	var mySwiper = new Swiper('.swiper-container', {
+		autoplay: 5000,
+		loop:true,
+		pagination : '.swiper-pagination',
+	})
+
+
+
+});
+</script>
+

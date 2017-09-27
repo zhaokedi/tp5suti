@@ -1,0 +1,219 @@
+
+<style>
+    .myCont .cardImg .card b img {
+        width: 3rem;
+        border-radius: 50%;
+        border: 1px solid #231815;
+        box-shadow: 2px 3px 5px #000;
+    }
+    .myCont .cardImg .card b {
+        position: absolute;
+        right: -0.9rem;
+        top: -1rem;
+    }
+    .myCont .cardImg .card .ttt p {
+        font-size: 0.4rem;
+        color: #333;
+        line-height: 1.4;
+    }
+
+
+
+</style>
+	<div class="myCont">
+        <if condition="$vip_status.status eq 1">
+            <div class="cardImg">
+                <div class="card">
+                    <img src="__PUBLIC__/home/uploadfile/images/{$user['card_img']}">
+                    <div class="text {$user.ttt}">
+                        <p>{$user.nickname}</p>
+                        <p>No.1{$user.card_num}</p>
+                        <p>已获得积分：{$user.point}</p>
+                    </div>
+                    <div class="cardStyle">
+                        <p style="color:{$vipcard[color]}">{$vipcard['vipname']}</p>
+
+                    </div>
+                    <b><img src="{$user.headurl}" style="height: 3rem"></b>
+                </div>
+            </div>
+            <else/>
+            <include file="Public:my_card"/>
+            </if>
+
+
+
+        <div class="list">
+            <if condition="$miao.status eq 1">
+            <div class="li li1" onclick="ajax_card_miao(this,{$miao['miaoid']})">
+                <a data-href="{:url('my_cardDetail',array('id'=>$miao['id']))}">
+                    <h1>秒杀月卡 <b>￥{$miao.money}</b></h1>
+                    <p>秒杀活动开始啦
+                        <if condition="$miao.is_start eq 1">
+                            <b>立即秒杀</b>
+                        <elseif condition="$miao.is_start eq 2"/>
+                            <b class="disable">尚未开始</b>
+                        <elseif condition="$miao.is_start eq 3"/>
+                            <b class="disable">已经结束</b>
+                        </if>
+                    </p>
+                </a>
+            </div>
+            </if>
+            <div class="li li2" onclick="ajax_card(this)">
+                <a data-href="{:url('my_cardDetail',array('id'=>$student['id']))}" >
+                    <h1>学生卡 <b>￥{$student.money}</b></h1>
+                    <p>仅限学生购买，需到店凭学生证激活 <if condition="$vip_status.status eq 1" ><b>立即续费</b><else/><b>立即开通</b></if></p>
+                </a>
+            </div>
+            <div class="li li1" onclick="ajax_card(this)">
+                <a data-href="{:url('my_cardDetail',array('id'=>$titan['id']))}" >
+                    <h1>体验卡 <b>￥{$titan.money}</b></h1>
+                    <p>仅限新会员首次购买 <if condition="$vip_status.status eq 1"><b>立即续费</b><else/><b>立即开通</b></if></p>
+                </a>
+            </div>
+            <div class="li li3">
+                <h1>肌动会员</h1>
+                <p>各门店通用，无限次免费教练服务</p>
+                <!--<i><img src="__PUBLIC__/home/images/my_arrow01_d.png"></i>-->
+                <i><img class="iconPlus" src="__PUBLIC__/home/images/icon_plus.png"><img class="iconMinus" src="__PUBLIC__/home/images/icon_minus.png"></i>
+            </div>
+            <dl >
+                <volist name="vip" id="vo">
+                    <dd onclick="ajax_card(this)">
+                        <a data-href="{:url('my_cardDetail',array('id'=>$vo['id']))}">
+                            {$vo.title}&nbsp;&nbsp; ￥{$vo.money}元 &nbsp;&nbsp;&nbsp;&nbsp;<span class="correct">(原价 ￥{$vo['original_price']})</span><if condition="$vip_status.status eq 1"><b>立即续费</b><else/><b>立即开通</b></if>
+                        </a>
+                    </dd>
+                </volist>
+
+            </dl>
+            <!--<div class="li li4">-->
+                <!--<h1>XXPro卡</h1>-->
+                <!--<p>简单描述简单描述简单描述简单描述</p>-->
+                <!--<i><img src="__PUBLIC__/home/images/my_arrow01_d.png"></i>-->
+            <!--</div>-->
+            <!--<dl>-->
+                <!--<volist name="vippro" id="vo">-->
+                <!--<dd onclick="ajax_card(this)">-->
+                    <!--<a data-href="{:url('my_cardDetail',array('id'=>$vo['id']))}">-->
+                        <!--{$vo.title}{$vo.money}元 <eq name="user.card_id" value="$vo.id"><b>立即续费</b><else/><b>立即开通</b></eq>-->
+                    <!--</a>-->
+                <!--</dd>-->
+                <!--</volist>-->
+            <!--</dl>-->
+        </div>
+
+
+    </div>
+
+<div class="bottomBlank"></div>
+<script>
+    //先检测有没秒杀权限在异步加载详情
+    function ajax_card_miao(obj,miaoid){
+        $.ajax({
+            url : "{:url('check_miao')}",
+            type : 'POST',
+            dataType : 'json',
+            data : {miaoid:miaoid},
+            success : function(rdata) {
+                if(rdata.status==1){
+                    $(".loading").show();
+                    var url=$(obj).find('a').data('href');
+                    $.ajax({
+                        url : url,
+                        type : 'POST',
+                        dataType : 'html',
+                        data : {'ajax' : 1},
+                        success : function(rdata) {
+                            $(".loading").hide();
+                            history.pushState(null,'',url)
+                            $(".contain").html(rdata);
+                        },
+                    });
+                }else {
+                    tips(rdata.msg)
+                }
+            },
+        });
+    }
+    //先检测有没体验权限在异步加载详情
+    function ajax_card_tiyan(obj){
+        $.ajax({
+            url : "{:url('check_tiyan')}",
+            type : 'POST',
+            dataType : 'json',
+            data : {},
+            success : function(rdata) {
+                if(rdata.status==1){
+                    $(".loading").show();
+                    var url=$(obj).find('a').data('href');
+                    $.ajax({
+                        url : url,
+                        type : 'POST',
+                        dataType : 'html',
+                        data : {'ajax' : 1},
+                        success : function(rdata) {
+                            $(".loading").hide();
+                            history.pushState(null,'',url)
+                            $(".contain").html(rdata);
+                        },
+                    });
+                }else {
+                    tips(rdata.msg)
+                }
+            },
+        });
+    }
+    //异步加载详情
+    function ajax_card(obj){
+        $(".loading").show();
+        var url=$(obj).find('a').data('href');
+        $.ajax({
+            url : url,
+            type : 'POST',
+            dataType : 'html',
+            data : {'ajax' : 1},
+            success : function(rdata) {
+//                $(".loading").hide();
+                history.pushState(null,'',url)
+                $(".contain").html(rdata);
+            },
+
+        });
+    }
+$(function(e) {
+
+
+    $(".loading").hide();
+    $(".li3").click(function(){
+        $(this).next('dl').slideToggle(100);
+        if( $(".iconPlus").css("display")=='none' ) {
+            $(".iconMinus").css("display","none");
+            $(".iconPlus").css("display","inline");
+        }else {
+            $(".iconPlus").css("display","none");
+            $(".iconMinus").css("display","inline");
+        }
+
+    });
+//    $(".favourBtn").click(function(){
+//        if($(this).hasClass("curr"))
+//        {
+//            $(this).removeClass("curr");
+//        }
+//        else
+//        {
+//            $(this).addClass("curr");
+//        }
+//    });
+
+
+	
+
+	
+});
+</script>
+
+</body>
+</html>

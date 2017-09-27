@@ -1,0 +1,24 @@
+
+
+<!--contain-->
+    <div class="contain">
+    	<div class="VPCont">
+        	<div class="VPTitle">
+            	邀请朋友扫一扫
+            </div>
+            <div class="intro">
+            	<img style="width:50%; display:block; margin:10px auto;" src="{$share_img_url}">
+                <volist name="share_info" id="vo">
+                    <p >{$vo.share_des}</p>
+                </volist>
+
+
+            </div>
+        </div>
+    </div>
+    <!--contain end-->
+<script>
+    $(function(){
+        $(".loading").hide();
+    })
+</script>

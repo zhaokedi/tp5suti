@@ -1,0 +1,83 @@
+
+	<div class="myCont">
+		<div class="cont1 flex-display flex-alignC">
+			<div class="img">
+				<img src="__PUBLIC__/home/uploadfile/images/user_img.jpg">
+			</div>
+			<div class="text flex-flex1">
+				<h1>{$user.nickname}</h1>
+				<p><i class="fa fa-map-marker" aria-hidden="true"></i>浙江省杭州市万英国籍XXXXXXX</p>
+			</div>
+			<div class="edit">
+				<a href="#"><i class="fa fa-edit" aria-hidden="true"></i> 编辑收货地址</a>
+			</div>
+		</div>
+		<div class="myTitle">
+			<i class="fa fa-file-text-o" aria-hidden="true"></i> 我的订单
+		</div>
+		<div class="myList">
+			<ul>
+				<li>
+					<a  data-href="{:url('Mall/order')}" onclick="ajax_detail(this)">
+						健身加油站订单 <i class="fa fa-angle-right" aria-hidden="true"></i>
+					</a>
+				</li>
+			</ul>
+		</div>
+		<div class="myTitle">
+			<i class="fa fa-file-text-o" aria-hidden="true"></i> 我的资产
+		</div>
+		<div class="myList">
+			<ul>
+				<li>
+					<a href="#">
+						优惠券 <i class="fa fa-angle-right" aria-hidden="true"></i>
+					</a>
+				</li>
+				<li>
+					<a href="#">
+						商城积分 <i class="fa fa-angle-right" aria-hidden="true"></i>
+					</a>
+				</li>
+			</ul>
+		</div>
+    </div>
+
+    <!--bottom-->
+    <div class="bottomBlank"></div>
+    <div class="bottom" style="z-index: 10000">
+    	<ul class="flex-display flex-alignC">
+			<li class=" flex-flex2">
+				<a data-href="{:url('Mall/index')}" onclick="ajax_detail(this)">
+					<img class="nimg" src="__PUBLIC__/home/images/mall_icon01.png">
+					<img class="himg" src="__PUBLIC__/home/images/mall_icon01_h.png">
+					<p>健康加油站</p>
+				</a>
+			</li>
+			<li class="flex-flex1">
+				<a data-href="{:url('Mall/cart')}" onclick="ajax_detail(this)">
+					<img class="nimg" src="__PUBLIC__/home/images/mall_icon02.png">
+					<img class="himg" src="__PUBLIC__/home/images/mall_icon02_h.png">
+					<p>购物车</p>
+				</a>
+			</li>
+			<li class="flex-flex1  curr">
+				<a data-href="{:url('Mall/my')}"  onclick="ajax_detail(this)">
+					<img class="nimg" src="__PUBLIC__/home/images/mall_icon03.png">
+					<img class="himg" src="__PUBLIC__/home/images/mall_icon03_h.png">
+					<p>我的</p>
+				</a>
+			</li>
+        </ul>
+    </div>
+    <!--bottom end-->
+
+
+<script>
+$(function(e) {
+
+	$(".loading").hide();
+
+});
+</script>
+

@@ -1,0 +1,208 @@
+
+<style>
+    .VPCCont .info p{
+        text-align:center; color:#fff; font-size:12px; line-height:12px; padding:5px 0;
+    }
+</style>
+<if condition="$has_plan eq 1">
+
+        <div class="VPCont">
+            <div class="VPTitle">
+                健身计划
+            </div>
+            <div class="VPCCont">
+                <div class="title" style="line-height:1;position: inherit;margin:0;">
+                    <div class="titleBlock">
+                        <b>体质报告</b>
+                    </div>
+                </div>
+                <div class="report">
+                    <h1>{$onelist.day}/{$onelist.month}/{$onelist.year}</h1>
+                    <ul class="flex-display status1">
+                        <li class="flex-flex1">
+                            <p style="margin-bottom:12px;">昵称&nbsp;{$onelist.nickname}</p>
+                            <p>年龄&nbsp;{$onelist.age}岁</p>
+                        </li>
+                        <li>
+                            <div class="img">
+                                <img src="{$onelist.headurl}">
+                            </div>
+                        </li>
+                        <li class="flex-flex1 S1L3">
+                            <p style="margin-bottom:12px;">身高&nbsp;{$onelist.height}cm</p>
+                            <p>体重&nbsp;{$onelist.weight}kg</p>
+                        </li>
+                    </ul>
+                    <ul class="status2">
+                        <li class="flex-display flex-alignC">
+                            <div class="text">
+                                去脂体重
+                            </div>
+                            <div class="process flex-flex1">
+                                <b style=" width:{$onelist.one_pre}%"></b>
+                            </div>
+                            <div class="text text2">
+                                {$onelist.qztz}kg
+                            </div>
+                        </li>
+                        <li class="flex-display flex-alignC">
+                            <div class="text">
+                                骨骼肌
+                            </div>
+                            <div class="process flex-flex1">
+                                <b style=" width:{$onelist.two_pre}%"></b>
+                            </div>
+                            <div class="text text2">
+                                {$onelist.ggj}kg
+                            </div>
+                        </li>
+                        <li class="flex-display flex-alignC">
+                            <div class="text">
+                                体脂肪
+                            </div>
+                            <div class="process flex-flex1">
+                                <b style=" width:{$onelist.three_pre}%"></b>
+                            </div>
+                            <div class="text text2">
+                                {$onelist.tzf}kg
+                            </div>
+                        </li>
+                        <li class="flex-display flex-alignC">
+                            <div class="text">
+                                体脂百分比
+                            </div>
+                            <div class="process flex-flex1">
+                                <b style=" width:{$onelist.four_pre}%"></b>
+                            </div>
+                            <div class="text text2">
+                                {$onelist.tzbfb}%
+                            </div>
+                        </li>
+                        <li class="flex-display flex-alignC">
+                            <div class="text">
+                                基础代谢
+                            </div>
+                            <div class="process flex-flex1">
+                                <b style=" width:{$onelist.five_pre}%"></b>
+                            </div>
+                            <div class="text text2">
+                                {$onelist.jcdx}kacl
+                            </div>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+
+            <div class="VPCCont">
+                <div class="title" style="line-height:1;position: inherit;margin:0;">
+                    <div class="titleBlock">
+                        <b>运动计划</b>
+                    </div>
+
+                </div>
+
+                <div class="info">
+                    <p style="text-align:center; color:#fff; font-size:12px; line-height:12px; padding:5px 0; margin-bottom:5px;">一周{$onelist.do_num}练</p>
+                    <if condition="$onelist['contentone']">
+                        <div class="dostyle_cfc">
+                            <p style="text-align:center; color:#fff; font-size:13px; line-height:13px; padding:5px 0; margin-bottom:10px;margin-top:10px;">第一练：{$onelist.onename}</p>
+                            <div class="detail" style="text-align:center; color:#fff; font-size:12px; line-height:16px; padding:5px 0;">
+                                {$onelist.contentone}
+                            </div>
+                        </div>
+                    </if>
+
+                    <if condition="$onelist['contenttwo']">
+                        <div class="dostyle_cfc">
+                            <p style="text-align:center; color:#fff; font-size:13px; line-height:13px; padding:5px 0; margin-bottom:10px;margin-top:10px;">第二练：{$onelist.twoname}</p>
+                            <div class="detail" style="text-align:center; color:#fff; font-size:12px; line-height:16px; padding:5px 0;">
+                                {$onelist.contenttwo}
+                            </div>
+                        </div>
+                    </if>
+
+                    <if condition="$onelist['contentthree']">
+                        <div class="dostyle_cfc">
+                            <p style="text-align:center; color:#fff; font-size:13px; line-height:13px; padding:5px 0; margin-bottom:10px;margin-top:10px;">第三练：{$onelist.threename}</p>
+                            <div class="detail" style="text-align:center; color:#fff; font-size:12px; line-height:16px; padding:5px 0;">
+                                {$onelist.contentthree}
+                            </div>
+                        </div>
+                    </if>
+
+                    <if condition="$onelist['contentfour']">
+                        <div class="dostyle_cfc">
+                            <p style="text-align:center; color:#fff; font-size:13px; line-height:13px; padding:5px 0; margin-bottom:10px;margin-top:10px;">第四练：{$onelist.fourname}</p>
+                            <div class="detail" style="text-align:center; color:#fff; font-size:12px; line-height:16px; padding:5px 0;">
+                                {$onelist.contentfour}
+                            </div>
+                        </div>
+                    </if>
+
+                </div>
+
+            </div>
+            <div class="VPCCont">
+                <div class="title" style="line-height:1;position: inherit;margin:0;">
+                    <div class="titleBlock">
+                        <b>饮食建议</b>
+                    </div>
+                </div>
+
+                <div class="info">
+                    <p style="text-align:center; color:#fff; font-size:16px; line-height:16px; padding:5px 0; margin-bottom:10px;margin-top:10px;">食物构成</p>
+                    <p style="text-align:center; color:#fff; font-size:12px; line-height:16px; padding:5px 0;">{$onelist.contentfive}</p>
+                </div>
+
+                <div class="info">
+                    <p style="text-align:center; color:#fff; font-size:16px; line-height:16px; padding:5px 0; margin-bottom:10px;margin-top:10px;">食物摄取量</p>
+                    <p style="text-align:center; color:#fff; font-size:12px; line-height:16px; padding:5px 0;">{$onelist.contentsix}</p>
+                </div>
+
+            </div>
+            <div class="btnBottomBlank"></div>
+        </div>
+
+    <elseif condition="$has_plan eq 2"/>
+    <div class="MPCont">
+
+        <div class="successCont">
+            <h1>您还没有定制您的私人健身计划，赶快定制吧~</h1>
+        </div>
+
+        <div class="MPCText">
+            <p>每次健身都不清楚该怎么练？</p>
+            <p>团操和跑步机伴随你的真个健身过程？</p>
+            <p>练了很久，却达不到自己想要的身材？</p>
+            <p>来一场和身体的对话，让他=它不再辜负你的期望</p>
+        </div>
+
+    </div>
+    <else/>
+    <div class="MPCont">
+        <div class="successCont">
+            <h1>您还不是会员,赶快开通会员加入我们吧~</h1>
+        </div>
+
+        <div class="MPCText">
+            <p>每次健身都不清楚该怎么练？</p>
+            <p>团操和跑步机伴随你的真个健身过程？</p>
+            <p>练了很久，却达不到自己想要的身材？</p>
+            <p>来一场和身体的对话，让他=它不再辜负你的期望</p>
+        </div>
+    </div>
+</if>
+
+
+
+
+
+<script>
+$(function() {
+    $(".loading").hide();
+
+});
+</script>
+
+

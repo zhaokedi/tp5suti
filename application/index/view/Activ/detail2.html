@@ -1,0 +1,326 @@
+
+    <div class="EVDCont">
+
+		<div class="EVDImg">
+			<img src="{$activ['banner_img']|fullimgpath}">
+			<div class="text">
+				<h1>{$activ.activname}</h1>
+				<!--<p>{$activ.topinfo}</p>-->
+
+			</div>
+
+
+
+			<if condition="($sign_status.status eq 2) and ($activ.is_end eq 1)">
+				<div class="status2">
+					<div class="statusBlank">
+						<img style="opacity:0; filter:alpha(opacity=0);" src="__PUBLIC__/home/uploadfile/images/index_img01.jpg">
+						<div class="statusBlock">
+							<img src="__PUBLIC__/home/images/event_icon01.png">
+						</div>
+					</div>
+				</div>
+				<elseif condition="($sign_status.status gt 0) "/>
+				<div class="status1">
+					<div class="statusBlank">
+						<img style="opacity:0; filter:alpha(opacity=0);" src="__PUBLIC__/home/uploadfile/images/index_img01.jpg">
+						<div class="statusBlock">
+							<img src="__PUBLIC__/home/images/success.png">
+							<h1>已报名</h1>
+							<if condition="($sign_status.status eq 1) and ($activ.is_end eq 0)">
+								<a class="signBtn" href="javascript:;">签到</a>
+								<elseif condition="($sign_status.status eq 2) and ($activ.is_end eq 0)"/>
+								<a class="disable" href="#">已签到</a>
+								<elseif condition="($activ.is_end eq 1) "/>
+								<a class="disable" href="#">已结束</a>
+							</if>
+						</div>
+					</div>
+				</div>
+			</if>
+		</div>
+
+		<div class="focusBtn">
+			<!--<a href="javascript:;">立即报名</a>-->
+			<if condition="$sign_status.status eq 0">
+				<a href="javascript:check_enroll({$activ['id']})">立即报名</a>
+			</if>
+		</div>
+
+		<div class="EVDText EVDText1">
+			<div class="title">
+				活动时间
+			</div>
+			<div class="text">
+				<p>{$activ.starttime|date="Y-m-d H:i",###}-{$activ.endtime|date="H:i",###}</p>
+			</div>
+		</div>
+
+		<div class="EVDText EVDText2">
+			<div class="title">
+				活动地点
+				<a data-href=""  onclick="look_map('{$activ.activname}','{$activ.addr}','{$activ.lat}')">查看地图&gt;</a>
+			</div>
+			<div class="text">
+				<p>{$activ['city']}{$activ['area']}{$activ.address}</p>
+			</div>
+		</div>
+
+		<div class="EVDText EVDText4">
+			<div class="title">
+				活动人数
+			</div>
+			<div class="text">
+				<p>限额{$activ.limit_people}人</p>
+			</div>
+		</div>
+
+		<div class="EVDText EVDText5">
+			<div class="title">
+				适合人群
+			</div>
+			<div class="text">
+				<p>青少年、壮年</p>
+			</div>
+		</div>
+		<div class="EVDText EVDText3">
+			<div class="title">
+				运动强度
+			</div>
+			<div class="text">
+				<for start="1" end="6">
+					<if condition="($i elt $activ['powerlevel'])">
+						<img src="__PUBLIC__/home/images/ED_img07_h.png">
+						<else/>
+						<img src="__PUBLIC__/home/images/ED_img07.png">
+					</if>
+				</for>
+
+			</div>
+		</div>
+		<div class="EVDText EVDText6">
+			<div class="title">
+				活动介绍
+			</div>
+			<div class="text">
+				<p>{$activ.detail}</p>
+			</div>
+		</div>
+		<div class="EVDText EVDText8">
+			<div class="title">
+				获奖名单（及奖品）
+			</div>
+			<div class="text">
+				<p>一等奖：{$activ.oneprize}</p>
+				<p>二等奖：{$activ.twoprize}</p>
+				<p>三等奖：{$activ.threeprize}</p>
+			</div>
+
+			<if condition="$prizestatus.status eq 0">
+				<a class="awardBtn" href="javascript:;"><img src="__PUBLIC__/home/images/event_icon02.png"></a>
+				<elseif condition="$prizestatus.status eq 1"/>
+				<a  href="javascript:;"><img src="__PUBLIC__/home/images/event_icon03.png"></a>
+				<else/>
+			</if>
+
+		</div>
+
+		<!--<div class="award award1">-->
+			<!--<img src="__PUBLIC__/home/images/award_img01.png">-->
+			<!--<div class="awardText">-->
+				<!--恭喜获得YMFM勋章-->
+			<!--</div>-->
+		<!--</div>-->
+
+
+		<div class="award award2">
+			<div class="stars">
+				<i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i>
+			</div>
+			<div class="awardText">
+				<h1>恭喜您在YMFM活动中</h1>
+				<h2>获得</h2>
+				<div class="awards">
+					<ul>
+						<li>
+							<div class="img">
+								<img src="__PUBLIC__/home/uploadfile/images/award2_img01.jpg">
+							</div>
+							<h3>会员积分</h3>
+							<p>+40</p>
+						</li><li>
+						<div class="img">
+							<img src="__PUBLIC__/home/uploadfile/images/award2_img02.jpg">
+						</div>
+						<h3>会员积分</h3>
+						<p>+40</p>
+					</li><li>
+						<div class="img">
+							<img src="__PUBLIC__/home/uploadfile/images/award2_img03.jpg">
+						</div>
+						<h3>会员积分</h3>
+						<p>+40</p>
+					</li>
+					</ul>
+				</div>
+				<a class="awardBtn2" href="javascript:;">点击领取</a>
+			</div>
+		</div>
+
+		<div class="pswCont pswCont1">
+			<div class="title">
+				<img src="__PUBLIC__/home/images/psw_icon01.png">亲手帮您捏个腹肌
+			</div>
+			<div class="text">
+				<h1>请工作人员输入密码</h1>
+				<input type="password" maxlength="4" value="">
+				<p>密码错误，请重新输入</p>
+			</div>
+		</div>
+
+		<div class="pswCont pswCont2">
+			<div class="title">
+				<img src="__PUBLIC__/home/images/psw_icon02.png">肌肉健身包
+			</div>
+			<div class="text">
+				<h1>请工作人员输入密码</h1>
+				<input type="password" maxlength="4" value="">
+				<p>密码错误，请重新输入</p>
+			</div>
+		</div>
+    </div>
+
+	<div class="btnBottomBlank"></div>
+
+<script>
+	function look_map(name,addr,option){
+		var option=option.split(",")
+		var latitude =parseFloat(option[0]);
+		var longitude =parseFloat(option[1]);
+		wx.ready(function () {
+			wx.openLocation({
+				latitude: latitude, // 纬度，浮点数，范围为90 ~ -90
+				longitude: longitude, // 经度，浮点数，范围为180 ~ -180。
+				name: name, // 位置名
+				address: addr, // 地址详情说明
+				scale: 14, // 地图缩放级别,整形值,范围从1~28。默认为最大
+				infoUrl: '' // 在查看位置界面底部显示的超链接,可点击跳转
+			});
+		})
+	}
+function check_enroll(id){
+	var res= check_tel("{:url('Activ/detail')}");
+	if(res==false)
+		return
+	$.ajax({
+		type: 'POST',
+		url: "{:url('check_enroll')}" ,
+		data: {id:id} ,
+		dataType:"json" ,
+		success: function(data){
+
+			if(data.status <0 ){
+				tips(data.msg);
+			}else{
+//				var url="{:url('Vip/order_pay')}";
+				var url="{:url('Vip/order_pay')}?table=Activ:pay_activ&id="+id;
+				location.href=url;
+//				var url=$(obj).find('a').data('href');
+//				$.ajax({
+//					url : url,
+//					type : 'POST',
+//					dataType : 'html',
+//					data : {'ajax' : 1,id:id,table:'Activ:pay_activ'},
+//					success : function(rdata) {
+//						history.pushState(null,'',url)
+//						$(".contain").html(rdata);
+//					},
+//				});
+			}
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown) {
+			tips('服务器连接异常');
+		}
+	});
+}
+	function check_tel(table){
+		var tel='{$user.tel}'
+		if(!tel){
+			var url="{:url('vip/bind_tel')}";
+			$.ajax({
+				url : url,
+				type : 'POST',
+				dataType : 'html',
+				data : {'ajax' : 1,table:table},
+				success : function(rdata) {
+					layer.closeAll();
+					history.pushState(null,'',url)
+					$(".contain").html(rdata);
+				},
+
+			});
+
+			return false;
+		}
+	}
+$(function(e) {
+	$(".loading").hide();
+	//签到
+	$(".signBtn").click(function(){
+		layer.closeAll();
+		layer.open({
+			type:1,
+			title:false,
+			content:$(".pswCont1"),
+			skin:"award_layer",
+			closeBtn:0,
+			shadeClose:1,
+			area:$(".pswCont1").width()
+		});
+	});
+//弹出领奖页面
+	$(".awardBtn").click(function(){
+		layer.closeAll();
+		layer.open({
+			type:1,
+			title:false,
+			content:$(".award2"),
+			skin:"award_layer",
+			closeBtn:0,
+			shadeClose:1,
+			area:$(".award2").width()
+		});
+	});
+//领取获奖奖品
+	$(".awardBtn2").click(function(){
+		layer.closeAll();
+		layer.open({
+			type:1,
+			title:false,
+			content:$(".pswCont2"),
+			skin:"award_layer",
+			closeBtn:0,
+			shadeClose:1,
+			area:$(".pswCont2").width()
+		});
+	});
+
+	$(".pswCont input").change(function(){
+		if($(this).val().length == 4)
+		{
+			alert($(this).val().length);
+		}
+	});
+//勋章
+	layer.open({
+		type:1,
+		title:false,
+		content:$(".award1"),
+		skin:"award_layer",
+		closeBtn:0,
+		shadeClose:1,
+		area:$(".award1").width()
+	});
+
+});
+</script>

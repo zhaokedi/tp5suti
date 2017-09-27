@@ -1,0 +1,16 @@
+.x-fileupdate input.form-control
+{
+    width: 80%;
+    display: inline-block;
+    float: left;
+    margin-right: 5px;
+}
+.x-map input.form-control
+{
+    width: 80%; display: inline-block; float: left;
+    margin-right: 5px;
+}
+#filemodel .modal-dialog {
+    z-index: 12100;
+
+}

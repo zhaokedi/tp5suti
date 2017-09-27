@@ -1,0 +1,114 @@
+
+<style>
+	.myAECont h2{
+		font-size: 0.525rem;
+		color: #585858;
+	}
+</style>
+	<div class="myAECont">
+		<div class="title">
+			<h1>团操主题：{$appointment.actionname}</h1>
+			<h1>健身时间：{$appointment.yuyuetime} -{$appointment.yuyueendhours}</h1>
+			<h2>请对此节课评分：最满意5分，不满意1分</h2>
+		</div>
+
+		<!--<h2 style="text-align:center;">请对此节课评分：最满意5分，不满意1分</h2>-->
+		<div class="eList">
+			<form>
+				<ul>
+					<li class="flex-display flex-alignC">
+						<div class="text thename"></div>
+						<input name="tids" type="hidden" value="123">
+						<input name="point" type="hidden">
+						<div class="raty flex-flex1"></div>
+					</li>
+
+				</ul>
+
+				<input type="hidden" name="apid" value="{$apid}">
+			</form>
+		</div>
+
+		<div class="inputBlock">
+			<textarea placeholder="留言评论,您的留言其他用户可见" name="content"></textarea>
+		</div>
+
+
+		<div class="btnBottom">
+			<a data-href="" onclick="save_action_evaluate()">
+				提交评价
+			</a>
+		</div>
+        
+        
+    </div>
+    
+
+
+<script>
+	function save_action_evaluate(){
+		var apid = $("input[name='apid']").val();
+		var point = $("input[name='score']").val();
+		var type = 2;
+		var content = $("textarea[name='content']").val();
+
+		if (point==''){
+			tips('您还未评分');
+			return;
+		}
+		if (content==''){
+			tips('评论能容不能为空');
+			return;
+		}
+		$.ajax({
+			url : "{:url('save_evaluation')}",
+			type : "POST",
+			data : {
+				"apid" : apid,
+				"content" : content,
+				"point" : point,
+				"type" : type
+			},
+			success : function(rdata){
+				if(rdata['status'] == 1){
+					var url="{:url('appo_evaluate_success')}";
+					tips(rdata['msg'],1000);
+					setTimeout(function(){
+						$.ajax({
+							url : url,
+							type : 'POST',
+							dataType : 'html',
+							data : {'ajax' : 1,	"type" : type},
+							success : function(rdata) {
+								$(".loading").hide();
+								history.pushState(null,'',url)
+								$(".contain").html(rdata);
+							},
+						});
+					},1000);
+				}else if(rdata['status'] == 2){
+					tips(rdata['msg']);
+				}
+			},
+			error : function(){
+				tips('操作失败');
+			}
+		});
+	}
+$(function(e) {
+		$(".loading").hide();
+		var mySwiper = new Swiper('.swiper-container', {
+			slidesPerView:4,
+		});
+
+	$(".raty").raty({
+		starOff: '__PUBLIC__/home/images/ED_img07.png',
+		starOn : '__PUBLIC__/home/images/ED_img07_h.png',
+		click: function(score, evt) {
+
+		}
+	});
+
+});
+</script>
+

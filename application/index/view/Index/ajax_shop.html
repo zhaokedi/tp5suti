@@ -1,0 +1,23 @@
+
+<volist name="morelist" id="vo" >
+<li>
+	<a onclick="isopen_jump(this);" data-url="{:url('shop_detail',array('id'=>$vo['id']))}" data-status="{$vo.status}"><img src="{$vo.first_img|fullimgpath}" ></a>
+	<div class="text">
+		<h1><a onclick="isopen_jump(this);" data-url="{:url('shop_detail',array('id'=>$vo['id']))}" data-status="{$vo.status}">{$vo.title}</a></h1>
+		<p><a onclick="isopen_jump(this);" data-url="{:url('shop_detail',array('id'=>$vo['id']))}" data-status="{$vo.status}">{$vo['address']}</a></p>
+		<!--<b class="favourBtn {{if value.favour}}curr{{/if}}"><img class="nimg" src="__PUBLIC__/home/images/favour.png"><img class="himg" src="__PUBLIC__/home/images/favour_h.png"></b>-->
+		<div class="focusBtn">
+			<div style="position:relative;">
+				<if condition="$vip_status.status eq 1">
+					<a href="javascript:;">自助预约</a>
+					<ul data-id="{$vo.id}" class="treelist" style="display:none;"></ul>
+					<else/>
+					<a data-href="{:url('submit')}" onclick="tips('{$vip_status[msg]}')">自助预约</a>
+				</if>
+
+			</div>
+		</div>
+	</div>
+</li>
+</volist>
+

@@ -1,0 +1,62 @@
+
+    
+    <div class="submitCont">
+		<div class="successCont2">
+			<img src="__PUBLIC__/home/images/ESS_icon01.png">
+			<h1>UWEGO {$onelist.title}</h1>
+			<h1>预约成功!</h1>
+		</div>
+
+		<div class="submitText1">
+			<ul>
+				<li class="flex-display flex-alignC">
+					<div class="name">
+						门锁密码：
+					</div>
+					<div class="info flex-flex1">
+						{$onelist.doornum}（{$onelist.accesshours}--{$onelist.accessendhours}有效）
+
+					</div>
+				</li>
+				<li class="flex-display flex-alignC">
+					<div class="name">
+						预约团操：
+					</div>
+					<div class="info flex-flex1">
+						{$onelist.actionname}
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div class="submitText1">
+			<ul>
+				<li class="flex-display flex-alignC">
+					<div class="name">
+						课程时间：
+					</div>
+					<div class="info flex-flex1">
+						{$onelist.yuyuemonth}&nbsp;{$onelist.yuyuehours}-{$onelist.yuyueendhours}
+					</div>
+				</li>
+			</ul>
+		</div>
+
+		<div class="indexTitle" style="margin-top:-1px;">
+			注意事项
+		</div>
+
+		<div class="submitText2" style="border-bottom:none;">
+				{$onelist.notice}
+		</div>
+        
+        
+    </div>
+    
+
+
+
+<script>
+jQuery(document).ready(function(e) {
+		$(".loading").hide();
+});
+</script>

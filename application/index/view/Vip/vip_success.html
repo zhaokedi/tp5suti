@@ -1,0 +1,115 @@
+
+    <div class="submitCont">
+
+		<div class="successCont">
+			<img src="__PUBLIC__/home/images/success.png" style=" width:1.8rem; padding-top:3.15rem;">
+			<h1>付款成功</h1>
+		</div>
+
+		<div class="submitText1">
+			<ul>
+				<li class="flex-display flex-alignC">
+					<div class="name">
+						支付流水号：
+					</div>
+					<div class="info flex-flex1">
+						{$Think.session.order_sn}
+					</div>
+				</li>
+				<li class="flex-display flex-alignC">
+					<div class="name">
+						支付时间：
+					</div>
+					<div class="info flex-flex1">
+						{$order.pay_time|date="Y年m月d日 H:i:s",###}
+					</div>
+				</li>
+				<li class="flex-display flex-alignC">
+					<div class="name">
+						支付金额：
+					</div>
+					<div class="info flex-flex1">
+						{$order.order_amount}
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div class="submitText1">
+			<ul>
+				<li class="flex-display flex-alignC">
+					<div class="name">
+						会<b>口口</b>员：
+					</div>
+					<div class="info flex-flex1">
+						{$user.nickname}
+					</div>
+				</li>
+				<li class="flex-display flex-alignC">
+					<div class="name">
+						到期时间：
+					</div>
+					<div class="info flex-flex1">
+						{$vip_buy.end_time|date="Y年m月d日 H:i:s",###}
+					</div>
+				</li>
+				<li class="flex-display flex-alignC">
+					<div class="name">
+						购卡类型：
+					</div>
+					<div class="info flex-flex1">
+						{$card}购买
+					</div>
+				</li>
+			</ul>
+		</div>
+
+		<div class="btnBottomBlank"></div>
+		<div class="btnBottom">
+			<a data-href="{:url('Index/index_shop')}" onclick="target_link(this)">
+				立即去预约健身 &gt;
+			</a>
+		</div>
+
+	</div>
+
+
+<script>
+	function target_link(obj,card_id){
+		var url=$(obj).data('href');
+		$.ajax({
+			url : url,
+			type : 'POST',
+			dataType : 'html',
+			data : {'ajax' : 1},
+			success : function(rdata) {
+				layer.closeAll();
+				history.pushState(null,'',url)
+				$(".contain").html(rdata);
+			},
+
+		});
+	}
+$(function(e) {
+
+	$(".loading").hide();
+	var url="{:url('bind_tel')}";
+	if(!'{$user.tel}'){
+		setTimeout(function(){
+			$.ajax({
+				url : url,
+				type : 'POST',
+				dataType : 'html',
+				data : {'ajax' : 1},
+				success : function(rdata) {
+					layer.closeAll();
+					history.pushState(null,'',url)
+					$(".contain").html(rdata);
+				},
+
+			});
+		},1000);
+	}
+
+});
+</script>
+

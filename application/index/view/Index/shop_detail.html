@@ -1,0 +1,251 @@
+
+<script>
+	/*
+	 * 注意：
+	 * 1. 所有的JS接口只能在公众号绑定的域名下调用，公众号开发者需要先登录微信公众平台进入“公众号设置”的“功能设置”里填写“JS接口安全域名”。
+	 * 2. 如果发现在 Android 不能分享自定义内容，请到官网下载最新的包覆盖安装，Android 自定义分享接口需升级至 6.0.2.58 版本及以上。
+	 * 3. 常见问题及完整 JS-SDK 文档地址：http://mp.weixin.qq.com/wiki/7/aaa137b55fb2e0456bf8dd9148dd613f.html
+	 *
+	 * 开发中遇到问题详见文档“附录5-常见错误及解决办法”解决，如仍未能解决可通过以下渠道反馈：
+	 * 邮箱地址：weixin-open@qq.com
+	 * 邮件主题：【微信JS-SDK反馈】具体问题
+	 * 邮件内容说明：用简明的语言描述问题所在，并交代清楚遇到该问题的场景，可附上截屏图片，微信团队会尽快处理你的反馈。
+	 */
+	wx.config({
+		debug: false,
+		appId: '{$signPackage.appId}',
+		timestamp: '{$signPackage.timestamp}',
+		nonceStr: '{$signPackage.nonceStr}',
+		signature: '{$signPackage.signature}',
+		jsApiList: [
+			'checkJsApi',
+			'chooseWXPay',
+			'getLocation',
+			'openLocation',
+		]
+	});
+</script>
+    <div class="SDCont">
+
+		<div class="SDImg">
+			<div class="banner">
+				<div class="swiper-container">
+					<div class="swiper-wrapper">
+						<volist name="imgs" id="vo">
+							<div class="swiper-slide">
+								<!--<a href="#">-->
+								<img src="{$vo.savepath|fullimgpath}">
+								<!--</a>-->
+							</div>
+						</volist>
+						<!--<div class="swiper-slide"><a href="#"><img src="__PUBLIC__/home/uploadfile/images/banner01.jpg"></a></div>-->
+						<!--<div class="swiper-slide"><a href="#"><img src="__PUBLIC__/home/uploadfile/images/banner01.jpg"></a></div>-->
+						<!--<div class="swiper-slide"><a href="#"><img src="__PUBLIC__/home/uploadfile/images/banner01.jpg"></a></div>-->
+					</div>
+					<div class="swiper-pagination"></div>
+				</div>
+			</div>
+			<!--<img src="__PUBLIC__{$shop.first_img}">-->
+			<div class="text" style="z-index: 999">
+				<h1>{$shop.title}</h1>
+				<p>{$shop['province']}{$shop['city']}{$shop['area']}{$shop['address']}</p>
+				<!--<b class="favourBtn <eq name="favour" value="1"> curr</eq>"><img class="nimg" src="__PUBLIC__/home/images/favour.png"><img class="himg" src="__PUBLIC__/home/images/favour_h.png"></b>-->
+			</div>
+		</div>
+
+		<div class="SDText SDText1">
+			<div class="title">
+				健身时间
+			</div>
+			<div class="text">
+				<p>60分钟</p>
+			</div>
+		</div>
+
+		<div class="SDText SDText2">
+			<div class="title">
+				场地介绍
+				<a data-href="{:url('map',array('id'=>$shop['id'],'table'=>'shop'))}" onclick="look_map('{$shop.title}','{$shop.addr}','{$shop.lat}')">查看地图&gt;</a>
+			</div>
+			<div class="text">
+				{$shop.placeinfo}
+			</div>
+		</div>
+
+		<div class="SDText SDText3">
+			<div class="title">
+				注意事项
+			</div>
+			<div class="text">
+				{$shop.notice}
+
+			</div>
+		</div>
+
+		<div class="SDText EDText6" style="border-bottom:none">
+			<div class="title">
+				健身步骤
+			</div>
+			<div class="text">
+				<img src="__PUBLIC__/home/uploadfile/images/ED_img01.jpg">
+
+			</div>
+		</div>
+		<div class="btnBottomBlank"></div>
+		<div class="btnBottom">
+			<input type="hidden" id="shop_near_id" value="{$shop.id}" />
+			<input type="hidden" id="hid_type_to" value="1" />
+			<if condition="$vip_status.status eq 1">
+				<a href="javascript:self_appointment()">自助预约</a>
+				<ul id="treelist" style="display:none;"></ul>
+				<else/>
+				<a data-href="{:('submit')}" onclick="tips('{$vip_status[msg]}')">自助预约</a>
+			</if>
+		</div>
+
+    </div>
+
+
+<script>
+	function look_map(name,addr,option){
+		var option=option.split(",")
+		var latitude =parseFloat(option[0]);
+		var longitude =parseFloat(option[1]);
+		wx.ready(function () {
+			wx.openLocation({
+				latitude: latitude, // 纬度，浮点数，范围为90 ~ -90
+				longitude: longitude, // 经度，浮点数，范围为180 ~ -180。
+				name: name, // 位置名
+				address: addr, // 地址详情说明
+				scale: 14, // 地图缩放级别,整形值,范围从1~28。默认为最大
+				infoUrl: '' // 在查看位置界面底部显示的超链接,可点击跳转
+			});
+		})
+	}
+$(function(e) {
+	var mySwiper = new Swiper('.swiper-container', {
+		autoplay: 3000,
+		loop:true,
+		pagination : '.swiper-pagination',
+	})
+	$(".loading").hide();
+	$(".favourBtn").click(function(){
+		if($(this).hasClass("curr")) {
+			$(this).removeClass("curr");
+		} else {
+			$(this).addClass("curr");
+		}
+	});
+
+
+	//时间插件设定部分
+	var weekday = ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'];
+	var html2 ;
+	var ia , ib , ic;
+	var openHour ;
+	var day0 = 0;
+	var times = function(){
+		for(var i2 = 0; i2<24; i2 ++)
+		{
+			if(day0 == 0 && i2<ib)
+			{
+
+			}else if(i2==ib && ic>50)
+			{
+
+			}
+			else
+			{
+				html2+='<li data-val="'+i2+'">'+(i2<7?'凌晨':i2<10?'早上':i2<12?'上午':i2<14?'中午':i2<19?'下午':'晚上')+(i2<10?'0'+i2:i2)+'点<ul>';
+				for(var i3 =0; i3<60; i3+=10)
+				{
+					if(day0 == 0 && i3<ic && i2==ib)
+					{
+
+					}
+					else
+					{
+						html2+='<li data-val="'+i3+'">'+(i3<10?'0'+i3:i3)+'分</li>';
+					}
+				}
+				html2+='</ul></li>';
+			}
+		}
+	}
+	var setList = function(){
+		html2 = '';
+		var dd2 = new Date();
+
+		ib = dd2.getHours();
+		ic = dd2.getMinutes();
+
+		for(var i = 0; i<=2 ; i++)
+		{
+			var dd = new Date();
+			dd.setDate(dd.getDate()+i);
+			var y = dd.getFullYear();
+			var m = dd.getMonth()+1;
+			var d = dd.getDate();
+			var dy = dd.getDay();
+			day0 = i;
+
+			if(i==0)
+			{
+				html2 += '<li data-val="'+(y+'-'+m+'-'+d)+'">今天<ul>';
+				openHour = dd.getHours();
+			}
+			else
+			{
+				html2 += '<li data-val="'+(y+'-'+m+'-'+d)+'">'+(m+'月'+d+'号 '+weekday[dy])+'<ul>';
+			}
+			times();
+			html2+='</ul></li>';
+		}
+
+		jQuery("#treelist").html('').append(html2);
+	}
+
+	//时间插件设定部分结
+	//时间插件执行部分
+	setList();
+
+	$("#treelist").mobiscroll().treelist({
+		theme: "ios",
+		lang: "zh",
+		display:'bottom',
+		placeholder: '',
+		height:40,
+		headerText: function (valueText) { return "选择预约时间"; },
+		onBeforeShow:function(inst){
+			setList();
+		},
+		circular:[false,false,false],
+		onSet:function(valueText,inst){
+			var shopid=$("#shop_near_id").val()
+			gotonext(valueText.valueText,"{:url('Index/shop_detail')}",shopid);
+		},
+
+	});
+});
+function check_tel(table){
+	var tel='{$user.tel}'
+	if(!tel){
+		var url="{:url('vip/bind_tel')}";
+		$.ajax({
+			url : url,
+			type : 'POST',
+			dataType : 'html',
+			data : {'ajax' : 1,table:table},
+			success : function(rdata) {
+				layer.closeAll();
+				history.pushState(null,'',url)
+				$(".contain").html(rdata);
+			},
+
+		});
+
+		return false;
+	}
+}
+
+</script>

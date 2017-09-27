@@ -1,0 +1,226 @@
+<style>
+
+    .MPCont .MPC2 .list p,pre {
+        font-size: 0.6rem;!important;
+        line-height: 1.275rem;
+    }
+    body{
+    background-color:#000;
+    }
+    tr{
+        font-size: 0.6rem;!important;
+
+    }
+</style>
+
+<if condition="$has_plan eq 1">
+    <div class="MPCont">
+
+        <div class="MPImg">
+            <div class="infoBlock">
+                <img src="{$user.headurl}"  style="width: 3.85rem;height: 3.85rem">
+                <!--<img src="__PUBLIC__/home/uploadfile/images/MAE_img02.png">-->
+                <p>{$user.nickname}</p>
+            </div>
+        </div>
+
+        <div class="MPC1">
+            <div class="swiper-container">
+                <div class="swiper-wrapper">
+                    <volist name="plan_list" id="vo">
+                        <div class="swiper-slide">
+                            <div class="MPC11">
+                                <div class="three">
+                                    <span>年龄：{$vo.age}</span><span>身高：{$vo.height}cm</span><span>体重：{$vo.weight}kg</span>
+                                </div>
+                                <div class="MPCTitle MPCTitle1">
+                                    体质报告
+                                </div>
+                                <p>{$vo.addtime|date="y-m-d",###}</p>
+                            </div>
+                            <div class="MPC12">
+                                <ul>
+                                    <li>
+                                        <h1>去脂肪体重：{$vo.qztz}kg</h1>
+                                        <div class="bar">
+                                            <b style="width:{$vo.one_pre}%;"></b>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <h1>骨骼肌：{$vo.ggj}kg</h1>
+                                        <div class="bar">
+                                            <b style="width:{$vo.two_pre}%;"></b>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <h1>体脂肪：{$vo.tzf}kg</h1>
+                                        <div class="bar">
+                                            <b style="width:{$vo.three_pre}%;"></b>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <h1>体脂肪百分比：{$vo.tzbfb}%</h1>
+                                        <div class="bar">
+                                            <b style="width:{$vo.four_pre}%;"></b>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </volist>
+                </div>
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
+            </div>
+        </div>
+
+        <div class="MPCTitle MPCTitle2">
+            运动计划
+        </div>
+
+        <div class="MPCTitleS">
+            一周{$onelist.do_num}练
+        </div>
+
+        <div class="MPC2">
+            <if condition="$onelist['onename']">
+                <div class="MPC2Title">
+                    {$onelist.onename}<b>NO.1</b>
+                </div>
+                <div class="list">
+                    <p> {$onelist.contentone}</p>
+                    <!--<p>1.平板哑铃卧推：3磅4组*10个</br>-->
+                    <!--2.平板哑铃飞鸟：2磅哑铃4组*10个</br>-->
+                    <!--3.跪姿窄距俯卧撑：4组*12个</br>-->
+                   <!--4.器械夹胸5磅4组*12个</br>-->
+                    <!--5.龙门架下压5磅4组*12个</br>-->
+                    <!--6.有氧20分钟。</p>-->
+                </div>
+            </if>
+            <if condition="$onelist['twoname']">
+                <div class="MPC2Title">
+                    {$onelist.twoname}<b>NO.2</b>
+                </div>
+                <div class="list">
+                    <p> {$onelist.contenttwo}</p>
+                </div>
+            </if>
+            <if condition="$onelist['threename']">
+                <div class="MPC2Title">
+                    {$onelist.threename}<b>NO.3</b>
+                </div>
+                <div class="list">
+                    <p> {$onelist.contentthree}</p>
+                </div>
+            </if>
+            <if condition="$onelist['fourname']">
+                <div class="MPC2Title">
+                    {$onelist.fourname}<b>NO.4</b>
+                </div>
+                <div class="list">
+                    <p> {$onelist.contentfour}</p>
+                </div>
+            </if>
+        </div>
+
+        <div class="MPCTitle MPCTitle3">
+            饮食建议
+        </div>
+
+        <div class="MPCTitleS">
+            食物构成
+        </div>
+
+        <div class="MPC3">
+            <table>
+                 <if condition="$onelist.foodname1 and $onelist.food1">
+                <tr>
+                    <th >{$onelist.foodname1}</th>
+                    <td ><p>{$onelist.food1}</p></td>
+                </tr>
+                 </if>
+                <if condition="$onelist.foodname2 and $onelist.food2">
+                    <tr>
+                        <th >{$onelist.foodname2}</th>
+                        <td >{$onelist.food2}</td>
+                    </tr>
+                </if>
+                <if condition="$onelist.foodname3 and $onelist.food3">
+                    <tr>
+                        <th >{$onelist.foodname3}</th>
+                        <td >{$onelist.food3}</td>
+                    </tr>
+                </if>
+                <if condition="$onelist.foodname4 and $onelist.food4">
+                    <tr>
+                        <th >{$onelist.foodname4}</th>
+                        <td >{$onelist.food4}</td>
+                    </tr>
+                </if>
+                <if condition="$onelist.foodname5 and $onelist.food5">
+                    <tr>
+                        <th >{$onelist.foodname5}</th>
+                        <td >{$onelist.food5}</td>
+                    </tr>
+                </if>
+            </table>
+        </div>
+
+        <div class="MPCTitleS">
+            食物摄取量
+        </div>
+
+        <div class="MPC4">
+            {$onelist.contentsix}
+        </div>
+
+    </div>
+
+    <div class="btnBottomBlank"></div>
+    <elseif condition="$has_plan eq 2"/>
+    <div class="MPCont">
+
+        <div class="successCont">
+            <h1>您还没有定制您的私人健身计划，赶快定制吧~</h1>
+        </div>
+
+        <div class="MPCText">
+            <p>每次健身都不清楚该怎么练？</p>
+            <p>团操和跑步机伴随你的真个健身过程？</p>
+            <p>练了很久，却达不到自己想要的身材？</p>
+            <p>来一场和身体的对话，让他=它不再辜负你的期望</p>
+        </div>
+
+    </div>
+
+    <else/>
+    <div class="MPCont">
+        <div class="successCont">
+            <h1>您还不是会员,赶快开通会员加入我们吧~</h1>
+        </div>
+
+        <div class="MPCText">
+            <p>每次健身都不清楚该怎么练？</p>
+            <p>团操和跑步机伴随你的真个健身过程？</p>
+            <p>练了很久，却达不到自己想要的身材？</p>
+            <p>来一场和身体的对话，让他=它不再辜负你的期望</p>
+        </div>
+    </div>
+</if>
+
+
+
+
+
+<script>
+    var mySwiper = new Swiper('.swiper-container', {
+        prevButton:'.swiper-button-prev',
+        nextButton:'.swiper-button-next',
+    })
+$(function() {
+    $(".loading").hide();
+
+});
+</script>
+
+

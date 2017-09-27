@@ -1,0 +1,37 @@
+<volist name="lists" id="vo">
+
+	<li class="liorder">
+		<div class="lititle">
+			下单时间：<span class="sp1">{$vo.add_time|date="Y-m-d H:i:s",###}</span><span class="fr sp1">{$vo.order_status_desc}</span>
+		</div>
+		<a  data-href="{:url('detail',array(''))}" class="cont flex-display flex-alignC">
+			<div class="img">
+				<img src="__PUBLIC__/home/images/order_img01.jpg">
+			</div>
+			<div class="text flex-flex1">
+				<h1>煮一口牛肉</h1>
+				<p>商品简单介绍商品简单介绍商品简单介绍商品简单介绍商品简单介绍商品简单介绍</p>
+			</div>
+		</a>
+		<div class="btns flex-display flex-alignC">
+			<div class="flex-flex1"><span class="sp1">合计：</span>￥{$vo['order_amount']}</div>
+			<div>
+				<if condition="$vo.cancel_btn eq 1"><a href="javascript:;" onClick="cancel_order({$list.order_id})">取消订单</a></if>
+				<if condition="$vo.pay_btn eq 1"><a href="#">马上付款</a></if>
+				<if condition="$vo.receive_btn eq 1"><a href="#">确认收货</a></if>
+				<if condition="($vo[return_btn] eq 1) and ($vo.shipping_btn eq 1)"><a href="#">联系售后</a></if>
+			</div>
+		</div>
+	</li>
+
+</volist>
+<script>
+	$(function(){
+		$(".liorder").click(function(){
+			$(".loading").show();
+			var url=$(this).find("a").data('href');
+			ajax_load(url);
+		})
+	})
+
+</script>
